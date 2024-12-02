@@ -53,6 +53,16 @@ yarn dev
 
 4. Access development server at `http://localhost:5173`
 
+## Deployment
+
+This site is automatically deployed via Cloudflare Pages. Any push to the `main` branch triggers a new deployment.
+
+### Deployment Process
+1. Changes pushed to `main` branch
+2. Cloudflare Pages automatically detects the push
+3. Builds the project using: `npm install && npm run build`
+4. Deploys to: [aimansalim.com](https://aimansalim.com)
+
 ## Project Structure
 
 ```
