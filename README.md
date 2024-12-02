@@ -1,59 +1,59 @@
-# 🚀 aimansalim.com
+# aimansalim.com
 
-Welcome to my personal portfolio website! This modern, interactive portfolio showcases my work and skills using cutting-edge web technologies.
+Personal portfolio website implementing modern web development practices.
 
-## ✨ Features
+## Core Features
 
-- 🎨 Modern UI/UX design with smooth animations
-- 🌐 Interactive 3D elements using Three.js
-- 📱 Fully responsive design for all devices
-- ⚡ Lightning-fast performance with Vite
-- 🎯 Built with TypeScript for type safety
-- 🎭 Beautiful animations and transitions
-- 🎨 Tailwind CSS for styling
+- Responsive design optimized for all viewport sizes
+- Server-side rendering for improved performance
+- Type-safe development with TypeScript
+- Modular component architecture
+- Efficient build system using Vite
+- 3D graphics integration with Three.js
+- CSS optimization with Tailwind
 
-## 🛠️ Tech Stack
+## Technology Stack
 
-- **Frontend Framework:** React
-- **Language:** TypeScript
-- **Build Tool:** Vite
-- **Styling:** Tailwind CSS
-- **3D Graphics:** Three.js
-- **Animations:** GSAP
-- **Deployment:** GitHub Pages
+- React 18.x
+- TypeScript 5.x
+- Vite
+- Tailwind CSS
+- Three.js
+- GSAP for animations
+- GitHub Pages for deployment
 
-## 🚀 Getting Started
+## Development Setup
 
-### Prerequisites
+### Requirements
 
-- Node.js (v16 or higher)
-- npm or yarn
+- Node.js version 16.0 or higher
+- npm or yarn package manager
 
-### Installation
+### Local Development
 
-1. Clone the repository:
+1. Clone the repository
 ```bash
 git clone https://github.com/aimansalim/aimansalim.com.git
 cd aimansalim.com
 ```
 
-2. Install dependencies:
+2. Install dependencies
 ```bash
 npm install
 # or
 yarn install
 ```
 
-3. Start the development server:
+3. Start development server
 ```bash
 npm run dev
 # or
 yarn dev
 ```
 
-4. Open [http://localhost:5173](http://localhost:5173) to view it in your browser.
+4. Access development server at `http://localhost:5173`
 
-## 🏗️ Project Structure
+## Project Structure
 
 ```
 aimansalim.com/
@@ -65,16 +65,16 @@ aimansalim.com/
 └── package.json          # Project dependencies
 ```
 
-## 📝 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 📫 Contact
+## Contact
 
 - Website: [aimansalim.com](https://aimansalim.com)
 - GitHub: [@aimansalim](https://github.com/aimansalim)
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 Special thanks to:
 - Three.js community for 3D graphics inspiration
