@@ -6,19 +6,85 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
+.pnpm-debug.log*
 
-node_modules
-dist
-dist-ssr
+# Dependencies
+node_modules/
+jspm_packages/
+bower_components/
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
+
+# Build outputs
+dist/
+dist-ssr/
+build/
 *.local
+.cache/
+.temp/
+.output/
 
-# Editor directories and files
+# Environment and local config
+.env
+.env.*
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+config.local.js
+*.local.json
+
+# Editor and IDE files
 .vscode/*
 !.vscode/extensions.json
-.idea
-.DS_Store
+!.vscode/settings.json
+.idea/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
+.DS_Store
+*.sublime-*
+
+# Debug and testing
+coverage/
+*.lcov
+.nyc_output/
+.grunt/
+lib-cov/
+
+# TypeScript
+*.tsbuildinfo
+
+# Misc
+.lock-wscript
+*.pid
+*.seed
+*.pid.lock
+.npm
+.eslintcache
+.stylelintcache
+.node_repl_history
+*.tgz
+.yarn-integrity
+
+# Build tools
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

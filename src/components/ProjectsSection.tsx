@@ -14,19 +14,19 @@ const projects: Project[] = [
     url: "https://uni-posti.vercel.app",
     title: "UNISPOT",
     description: "University study spots finder and review platform",
-    imageUrl: "https://shot.screenshotapi.net/screenshot/d9e7c2d1-8f7d-42b0-8f0e-e9e7b916e3e9.png?token=WQXJ7KG-G5MMQR8-PVFMMQK-DPQMZ3P&width=1024&height=576&output=image&url=https%3A%2F%2Funi-posti.vercel.app%2F"
+    imageUrl: "https://uni-posti.vercel.app/preview.png"
   },
   {
     url: "https://boold.co",
     title: "BOOLD AI",
     description: "AI-powered copywriting tool for businesses and entrepreneurs",
-    imageUrl: "https://shot.screenshotapi.net/screenshot/d9e7c2d1-8f7d-42b0-8f0e-e9e7b916e3e9.png?token=WQXJ7KG-G5MMQR8-PVFMMQK-DPQMZ3P&width=1024&height=576&output=image&url=https%3A%2F%2Fboold.co%2F"
+    imageUrl: "https://boold.co/preview.png"
   },
   {
     url: "https://boold.it",
     title: "BOOLD DESIGN",
     description: "Creative agency specializing in branding and web design",
-    imageUrl: "https://shot.screenshotapi.net/screenshot/d9e7c2d1-8f7d-42b0-8f0e-e9e7b916e3e9.png?token=WQXJ7KG-G5MMQR8-PVFMMQK-DPQMZ3P&width=1024&height=576&output=image&url=https%3A%2F%2Fboold.it%2F"
+    imageUrl: "https://boold.it/preview.png"
   }
 ];
 
