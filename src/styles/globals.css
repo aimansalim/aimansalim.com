@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Global selection styles */
+  ::selection {
+    background-color: white;
+    color: black;
+  }
+
+  ::-moz-selection {
+    background-color: white;
+    color: black;
+  }
+
+  /* Image selection */
+  img::selection {
+    background-color: rgba(255, 255, 255, 0.2);
+    filter: invert(1) grayscale(1);
+  }
+
+  img::-moz-selection {
+    background-color: rgba(255, 255, 255, 0.2);
+    filter: invert(1) grayscale(1);
+  }
+
+  /* Code block selection */
+  pre::selection, code::selection {
+    background-color: white;
+    color: black;
+  }
+
+  pre::-moz-selection, code::-moz-selection {
+    background-color: white;
+    color: black;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: black;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.1) black;
+}
