@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 interface NavigationProps {
@@ -15,7 +15,7 @@ export const Navigation = ({ onMenuOpen }: NavigationProps) => {
     <nav className="fixed top-0 left-0 right-0 z-50 p-4">
       <div className="max-w-7xl mx-auto">
         {/* Main Navigation Container */}
-        <div className="relative border border-white/10 bg-black">
+        <div className="relative border border-white/10 bg-black/80 backdrop-blur-sm">
           {/* Corner Decorations */}
           <div className="absolute top-0 left-0 h-4 w-4 border-t border-l border-white/20" />
           <div className="absolute top-0 right-0 h-4 w-4 border-t border-r border-white/20" />
@@ -27,7 +27,7 @@ export const Navigation = ({ onMenuOpen }: NavigationProps) => {
               {/* Logo/Home Link */}
               <Link 
                 to="/" 
-                className="text-white font-space-grotesk text-sm md:text-lg tracking-[0.0em] hover:text-emerald-500 transition-colors"
+                className="text-white font-space-grotesk text-xs sm:text-sm tracking-[0.0em] hover:text-emerald-500 transition-colors"
               >
                 AIMAN SALIM
               </Link>
@@ -36,26 +36,25 @@ export const Navigation = ({ onMenuOpen }: NavigationProps) => {
               <div className="hidden md:flex items-center space-x-8">
                 <Link 
                   to="/about" 
-                  className={`text-sm font-space-grotesk tracking-wider ${isActive('/about') ? 'text-emerald-500' : 'text-white/60 hover:text-white'}`}
+                  className={`text-xs sm:text-sm font-space-grotesk tracking-wider ${isActive('/about') ? 'text-emerald-500' : 'text-white/60 hover:text-white'}`}
                 >
                   ABOUT
                 </Link>
                 <Link 
                   to="/projects/unispot" 
-                  className={`text-sm font-space-grotesk tracking-wider ${isActive('/projects/unispot') ? 'text-emerald-500' : 'text-white/60 hover:text-white'}`}
+                  className={`text-xs sm:text-sm font-space-grotesk tracking-wider ${isActive('/projects/unispot') ? 'text-emerald-500' : 'text-white/60 hover:text-white'}`}
                 >
                   UNISPOT
                 </Link>
                 <Link 
                   to="/projects/design" 
-                  className={`text-sm font-space-grotesk tracking-wider ${isActive('/projects/design') ? 'text-emerald-500' : 'text-white/60 hover:text-white'}`}
+                  className={`text-xs sm:text-sm font-space-grotesk tracking-wider ${isActive('/projects/design') ? 'text-emerald-500' : 'text-white/60 hover:text-white'}`}
                 >
                   DESIGN
                 </Link>
                 <Link 
                   to="/contact" 
-                  //make it much more similar to the other buttons <div className="flex flex-wrap gap-4 pt-4">
-                  className={`px-4 py-2 text-sm font-space-grotesk tracking-wider border border-white/20 hover:border-white/40 transition-colors 
+                  className={`px-3 py-1.5 text-xs sm:text-sm font-space-grotesk tracking-wider border border-white/20 hover:border-white/40 transition-colors 
                     ${isActive('/contact') ? 'text-emerald-500 border-emerald-500' : 'text-white/60 hover:text-white'}`}
                 >
                   CONTACT

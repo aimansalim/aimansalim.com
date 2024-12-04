@@ -4,7 +4,6 @@ import { motion } from 'framer-motion';
 import { Command, ChevronRight, ExternalLink } from 'lucide-react';
 import { BackgroundGrid } from './components/BackgroundGrid';
 import { Navigation } from './components/Navigation';
-import { NavigationBar } from './components/NavigationBar';
 import UniSpotPage from './pages/projects/UniSpotPage';
 import DesignPage from './pages/projects/DesignPage';
 import SuccessPage from './pages/success';
@@ -19,7 +18,7 @@ import { ContentCreatorSection } from './components/ContentCreatorSection';
 import { ScrollToTop } from './components/ScrollToTop';
 
 function App() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [, setIsMenuOpen] = useState(false);
 
   const handleMenuOpen = () => {
     setIsMenuOpen(true);
@@ -29,7 +28,6 @@ function App() {
     <Router>
       <ScrollToTop />
       <div className="min-h-screen bg-black text-white relative">
-        <NavigationBar />
         <BackgroundGrid />
         <Navigation onMenuOpen={handleMenuOpen} />
         
@@ -46,22 +44,19 @@ function App() {
                     transition={{ duration: 0.8 }}
                     className="text-center relative"
                   >
-                    <div className="inline-flex items-center space-x-2 mb-4 px-4 py-2 border border-white/10 rounded-sm bg-white/5 backdrop-blur-sm">
+                    <div className="inline-flex items-center space-x-2 mb-12 px-4 py-2 border border-white/10 rounded-sm bg-white/5 backdrop-blur-sm">
                       <StatusIndicator />
                       
                       <span className="text-white/60 uppercase tracking-widest text-sm">Working Status: Active</span>
                     </div>
                     
-                    <h1 className="font-space-grotesk font-medium tracking-tight leading-none">
-
-                      <span className="text-[56px] text-zinc-500 block">AIMAN SALIM</span>
-                      <span className="text-[56px] text-white block mt-1">THE CREATOR'S ENGINEER</span>
+                    <h1 className="font-space-grotesk font-medium tracking-tight leading-none mb-12">
+                      <span className="text-[56px] sm:text-[56px] text-zinc-500 block">AIMAN SALIM</span>
+                      <span className="text-[56px] sm:text-[56px] text-white block mt-1">THE CREATOR'S ENGINEER</span>
                     </h1>
                     
                     <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-12 leading-relaxed">
-                      Building AI-powered tools for the future of content creation. 
-                      Combining engineering precision with design excellence to develop 
-                      innovative solutions that empower creators.
+                      Building tools I wish I had & designing stuff I want to see.
                     </p>
 
                     <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6 mb-24">
