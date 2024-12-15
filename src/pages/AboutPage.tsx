@@ -8,7 +8,7 @@ interface SectionProps {
 }
 
 const Section: React.FC<SectionProps> = ({ children, title }) => (
-  <div className="space-y-8">
+  <div className="space-y-16">
     <div className="flex items-center space-x-4 sticky top-8 bg-black z-10 py-4">
       <h2 className="text-xs tracking-[0.2em] uppercase">{title}</h2>
       <div className="flex-1 hairline" />
@@ -205,56 +205,62 @@ const TechBox: React.FC<{
   </div>
 );
 
+const CornerDecorations = () => (
+  <>
+    <div className="absolute top-0 left-0 h-4 w-4 border-t border-l border-white/20" />
+    <div className="absolute top-0 right-0 h-4 w-4 border-t border-r border-white/20" />
+    <div className="absolute bottom-0 left-0 h-4 w-4 border-b border-l border-white/20" />
+    <div className="absolute bottom-0 right-0 h-4 w-4 border-b border-r border-white/20" />
+  </>
+);
+
 const AboutPage: React.FC = () => {
   return (
-    <motion.div 
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      className="min-h-screen bg-black pt-32 pb-24 px-6 grid-pattern"
-    >
-      <div className="max-w-5xl mx-auto space-y-24">
+    <div className="min-h-screen bg-black pt-24 pb-16 font-space-grotesk">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
         {/* Header */}
-        <header className="space-y-6">
-          <motion.div 
-            className="box-hairline relative overflow-hidden"
-            whileHover={{ scale: 1.01 }}
-            transition={{ duration: 0.2 }}
-          >
-            <div className="p-8 space-y-6">
-              <div className="space-y-4">
-                <motion.h1 
-                  className="text-5xl font-light tracking-tight"
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ duration: 0.5 }}
-                >
-                  AIMAN SALIM
-                </motion.h1>
-                <motion.div 
-                  className="text-sm text-white/60 flex items-center space-x-3"
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ duration: 0.5, delay: 0.1 }}
-                >
-                  <span>SOFTWARE ENGINEERING STUDENT</span>
-                  <span className="w-1 h-1 bg-white/20" />
-                  <span>ITALY</span>
-                </motion.div>
-              </div>
-              <div className="hairline" />
-              <motion.p 
-                className="text-sm leading-relaxed max-w-2xl"
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ duration: 0.5, delay: 0.2 }}
-              >
-                Currently studying Software Engineering at 22, while running multiple projects:
-                Creative Direction (160M+ Views), Technical Architecture, and Brand Development.
-              </motion.p>
-            </div>
-          </motion.div>
-        </header>
+        <div className="relative border border-white/10 p-8 md:p-12">
+          <CornerDecorations />
+          <div className="flex items-center gap-2 mb-8">
+            <div className="w-1 h-1 bg-white/40" />
+            <div className="text-[10px] uppercase tracking-wider text-white/40">Personnel File</div>
+            <div className="flex-1 h-px bg-white/10" />
+          </div>
+          
+          <div className="space-y-8">
+            <motion.h1 
+              className="text-6xl font-light tracking-tight"
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              AIMAN SALIM
+            </motion.h1>
+            
+            <motion.div 
+              className="text-sm text-white/60 flex items-center space-x-4"
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.1 }}
+            >
+              <span>SOFTWARE ENGINEERING STUDENT</span>
+              <span className="w-1 h-1 bg-white/20" />
+              <span>ITALY</span>
+            </motion.div>
+            
+            <div className="h-px bg-white/10" />
+            
+            <motion.p 
+              className="text-base leading-relaxed max-w-2xl text-white/80"
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              Currently studying Software Engineering at 22, while running multiple projects:
+              Creative Direction (160M+ Views), Technical Architecture, and Brand Development.
+            </motion.p>
+          </div>
+        </div>
 
         {/* Projects */}
         <Section title="SELECTED PROJECTS">
@@ -321,7 +327,7 @@ const AboutPage: React.FC = () => {
           </div>
         </Section>
       </div>
-    </motion.div>
+    </div>
   );
 }
 

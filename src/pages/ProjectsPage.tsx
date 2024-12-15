@@ -1,192 +1,252 @@
-import React from 'react';
+import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { Command, ExternalLink, Code2, Layers, Box, Globe, Cpu } from 'lucide-react';
+
+// Project type definition
+interface Project {
+  id: string;
+  category: string;
+  status: 'ACTIVE' | 'BETA' | 'ARCHIVED';
+  name: string;
+  description: string;
+  metrics: Array<{ label: string; value: string }>;
+  stack: Array<{ name: string; type: string }>;
+  link?: string;
+  route?: string;
+}
+
+const projects: Project[] = [
+  {
+    id: '001',
+    category: 'TACTICAL',
+    status: 'ACTIVE',
+    name: 'UNISPOT',
+    description: 'Real-time campus navigation and occupancy tracking system.',
+    metrics: [
+      { label: 'Zones', value: '100+' },
+      { label: 'Buildings', value: '25' },
+      { label: 'Users', value: '5000+' }
+    ],
+    stack: [
+      { name: 'React', type: 'Frontend' },
+      { name: 'WebSocket', type: 'Real-time' },
+      { name: 'TypeScript', type: 'Core' }
+    ],
+    route: '/projects/unispot'
+  },
+  {
+    id: '002',
+    category: 'DESIGN LEAD',
+    status: 'ACTIVE',
+    name: 'ALEDELLAGIUSTA',
+    description: 'Lead designer and creative director with a proven track record in digital design and brand development.',
+    metrics: [
+      { label: 'Designs', value: '110+' },
+      { label: 'Total Views', value: '160M+' },
+      { label: 'Experience', value: '3+ Years' }
+    ],
+    stack: [
+      { name: 'Figma', type: 'Design' },
+      { name: 'Adobe CC', type: 'Creative' },
+      { name: 'Webflow', type: 'Deploy' },
+      { name: 'After Effects', type: 'Motion' }
+    ],
+    link: 'https://aledellagiusta.com'
+  },
+  {
+    id: '003',
+    category: 'DESIGN',
+    status: 'ACTIVE',
+    name: 'BOOLD DESIGN',
+    description: 'Creative agency specializing in branding and web design. Portfolio includes personal website designs and upcoming projects.',
+    metrics: [
+      { label: 'Projects', value: '50+' },
+      { label: 'Websites', value: '15+' },
+      { label: 'Success Rate', value: '95%' }
+    ],
+    stack: [
+      { name: 'Figma', type: 'Design' },
+      { name: 'React', type: 'Frontend' },
+      { name: 'TailwindCSS', type: 'Styling' },
+      { name: 'Framer', type: 'Motion' }
+    ],
+    route: '/projects/design'
+  },
+  {
+    id: '004',
+    category: 'AI OPS',
+    status: 'ACTIVE',
+    name: 'CALORIES AI',
+    description: 'AI-powered nutrition tracking and meal analysis system.',
+    metrics: [
+      { label: 'Accuracy', value: '95%' },
+      { label: 'Database', value: '10K+ Foods' },
+      { label: 'Response', value: '< 2s' }
+    ],
+    stack: [
+      { name: 'TensorFlow', type: 'AI' },
+      { name: 'Python', type: 'Backend' },
+      { name: 'React', type: 'Frontend' },
+      { name: 'OpenCV', type: 'Vision' }
+    ],
+    link: 'https://calories-ai.pages.dev'
+  },
+  {
+    id: '005',
+    category: 'OPERATIONS',
+    status: 'BETA',
+    name: 'BOOLD AI',
+    description: 'AI-powered copywriting tool for businesses and entrepreneurs.',
+    metrics: [
+      { label: 'Response Time', value: '< 5ms' },
+      { label: 'Uptime', value: '99.9%' },
+      { label: 'Users', value: '500+' }
+    ],
+    stack: [
+      { name: 'GPT-4', type: 'AI' },
+      { name: 'Next.js', type: 'Frontend' },
+      { name: 'PostgreSQL', type: 'Database' }
+    ],
+    link: 'https://boold.co'
+  }
+];
+
+// Corner decorations component
+const CornerDecorations = () => (
+  <>
+    <div className="absolute top-0 left-0 h-4 w-4 border-t border-l border-white/20" />
+    <div className="absolute top-0 right-0 h-4 w-4 border-t border-r border-white/20" />
+    <div className="absolute bottom-0 left-0 h-4 w-4 border-b border-l border-white/20" />
+    <div className="absolute bottom-0 right-0 h-4 w-4 border-b border-r border-white/20" />
+  </>
+);
 
 export default function ProjectsPage() {
   return (
-    <div className="min-h-screen bg-black text-white py-24">
-      <div className="max-w-6xl mx-auto px-6">
+    <div className="min-h-screen bg-black pt-24 pb-16 font-space-grotesk">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="flex items-center gap-2 mb-12">
-          <div className="w-1 h-1 bg-white/40" />
-          <div className="text-[10px] uppercase tracking-wider text-white/40">Operations</div>
-          <div className="flex-1 h-px bg-white/10" />
+        <div className="relative mb-12 border border-white/10 p-6 md:p-8">
+          <CornerDecorations />
+          <div className="flex items-center gap-2 mb-6">
+            <div className="w-1 h-1 bg-white/40" />
+            <div className="text-[10px] uppercase tracking-wider text-white/40">Mission Control</div>
+            <div className="flex-1 h-px bg-white/10" />
+            <div className="text-[10px] uppercase tracking-wider text-white/40">Projects: {projects.length}</div>
+          </div>
+
+          {/* Stats Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { icon: Code2, label: 'Active Projects', value: projects.filter(p => p.status === 'ACTIVE').length },
+              { icon: Layers, label: 'Total Stack Items', value: projects.reduce((acc, p) => acc + p.stack.length, 0) },
+              { icon: Box, label: 'Deployments', value: projects.length },
+              { icon: Globe, label: 'Live Systems', value: projects.filter(p => p.status !== 'ARCHIVED').length }
+            ].map((stat, i) => (
+              <div key={i} className="relative border border-white/10 p-4">
+                <CornerDecorations />
+                <div className="flex items-center gap-2 mb-3">
+                  <stat.icon className="w-3 h-3 text-white/40" />
+                  <div className="text-[10px] uppercase tracking-wider text-white/40">{stat.label}</div>
+                </div>
+                <div className="text-2xl font-medium">{stat.value}</div>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Projects Grid */}
-        <div className="grid grid-cols-1 gap-6">
-          {/* BOOLD AI */}
-          <div className="border border-white/10">
-            <div className="p-8 space-y-6">
-              <div className="flex items-center gap-2">
-                <div className="w-1 h-1 bg-emerald-500/50" />
-                <div className="text-[10px] uppercase tracking-wider text-white/40">BOOLD AI</div>
-                <span className="ml-auto text-[10px] uppercase tracking-wider text-emerald-500/50">Beta</span>
-              </div>
-
-              <div>
-                <h2 className="text-2xl font-medium mb-3">"Decide Like a Human. Act Like an AI."</h2>
-                <p className="text-white/60 leading-relaxed max-w-2xl">
-                  AI-powered copywriting tool for businesses and entrepreneurs, leveraging advanced
-                  GPT-3 technology for strategic content creation and business planning.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-4 gap-3">
-                {[
-                  "AI Copywriting",
-                  "GPT-3 Technology",
-                  "Strategic Planning",
-                  "Business Solutions"
-                ].map((tech, i) => (
-                  <div key={i} className="px-3 py-2 border border-white/10 hover:border-white/20">
-                    <span className="text-xs text-white/60">{tech}</span>
-                  </div>
-                ))}
-              </div>
-
-              <a 
-                href="https://boold.co" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="inline-flex items-center gap-2 text-xs text-white/40 hover:text-white/60"
-              >
-                <span className="uppercase tracking-wider">Get Early Access</span>
-                <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </a>
-            </div>
-          </div>
-
-          {/* BOOLD Design */}
-          <div className="border border-white/10">
-            <div className="p-8 space-y-6">
-              <div className="flex items-center gap-2">
-                <div className="w-1 h-1 bg-white/40" />
-                <div className="text-[10px] uppercase tracking-wider text-white/40">BOOLD Design</div>
-              </div>
-
-              <div>
-                <h2 className="text-2xl font-medium mb-3">"Innova con il design, racconta con il marketing."</h2>
-                <p className="text-white/60 leading-relaxed max-w-2xl">
-                  Creative agency in Modena specializing in branding, web design, and social media management.
-                  Delivering modern and functional digital experiences tailored to business needs.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-4 gap-3">
-                {[
-                  "Brand Identity",
-                  "Web Design",
-                  "Social Media",
-                  "Content Creation"
-                ].map((service, i) => (
-                  <div key={i} className="px-3 py-2 border border-white/10 hover:border-white/20">
-                    <span className="text-xs text-white/60">{service}</span>
-                  </div>
-                ))}
-              </div>
-
-              <a 
-                href="https://boold.it" 
-                target="_blank" 
-                rel="noopener noreferrer" 
-                className="inline-flex items-center gap-2 text-xs text-white/40 hover:text-white/60"
-              >
-                <span className="uppercase tracking-wider">View Operations</span>
-                <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </a>
-            </div>
-          </div>
-
-          {/* UniSpot Project */}
-          <div className="border border-white/10">
-            <div className="p-8 space-y-6">
-              {/* Project Preview */}
-              <div className="relative aspect-[21/9] border border-white/10 overflow-hidden">
-                <iframe
-                  src="https://uni-posti.vercel.app"
-                  title="UniSpot Live Demo"
-                  className="absolute inset-0 w-full h-full"
-                  style={{ border: 'none' }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/90 to-transparent">
-                  <div className="absolute inset-0 bg-[radial-gradient(#ffffff11_1px,transparent_1px)] [background-size:16px_16px]" />
-                </div>
-                <div className="absolute bottom-0 left-0 right-0 p-8">
-                  <div className="inline-flex items-center gap-2 mb-3 px-2 py-1 border border-white/20 bg-black/50">
-                    <div className="w-1 h-1 bg-emerald-500/50" />
-                    <span className="text-[10px] uppercase tracking-wider text-white/60">Mission Objective</span>
-                  </div>
-                  
-                  <h2 className="text-3xl text-white mb-3 font-medium tracking-wide">UniSpot</h2>
-                  <p className="text-white/60 text-lg max-w-2xl leading-relaxed">
-                    Real-time campus navigation system for Unimore University, featuring live occupancy tracking 
-                    and space optimization across Modena's academic facilities.
-                  </p>
-                </div>
-              </div>
-
-              {/* Project Stats */}
-              <div className="grid grid-cols-3 gap-3">
-                {[
-                  { label: "Latency", value: "5ms", highlight: true },
-                  { label: "Buildings", value: "25+", highlight: false },
-                  { label: "Zones", value: "100+", highlight: false },
-                  { label: "Uptime", value: "99.9%", highlight: true },
-                  { label: "Users", value: "5000+", highlight: false },
-                  { label: "Updates", value: "Real-time", highlight: true }
-                ].map((stat, i) => (
-                  <div 
-                    key={i} 
-                    className={`relative border border-white/10 p-4 hover:border-white/20 transition-colors
-                      ${stat.highlight ? 'border-l-emerald-500/50' : ''}`}
-                  >
-                    <div className="flex items-center gap-2 mb-2">
-                      <div className={`w-1 h-1 ${stat.highlight ? 'bg-emerald-500/50' : 'bg-white/20'}`} />
-                      <div className="text-[10px] uppercase tracking-wider text-white/40">{stat.label}</div>
+        <div className="grid grid-cols-1 gap-4">
+          {projects.map((project) => (
+            <motion.div
+              key={project.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="relative border border-white/10 hover:border-white/20 transition-colors"
+            >
+              <CornerDecorations />
+              <div className="p-6 md:p-8">
+                {/* Project Header */}
+                <div className="flex items-center justify-between mb-8">
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2">
+                      <div className="w-1 h-1 bg-emerald-500/50" />
+                      <div className="text-[10px] uppercase tracking-wider text-white/40">{project.category}</div>
                     </div>
-                    <div className="text-xl font-medium text-white/80">{stat.value}</div>
+                    <div className="text-[10px] px-2 py-1 border border-white/10 uppercase tracking-wider text-white/60">
+                      ID: {project.id}
+                    </div>
+                    <div className={`text-[10px] px-2 py-1 border uppercase tracking-wider
+                      ${project.status === 'ACTIVE' ? 'border-emerald-500/50 text-emerald-500/50' :
+                        project.status === 'BETA' ? 'border-blue-500/50 text-blue-500/50' :
+                        'border-white/10 text-white/40'}`}>
+                      {project.status}
+                    </div>
                   </div>
-                ))}
-              </div>
-
-              {/* Tech Stack */}
-              <div>
-                <div className="flex items-center gap-2 mb-4">
-                  <div className="w-1 h-1 bg-emerald-500/50" />
-                  <div className="text-[10px] uppercase tracking-wider text-white/40">Tech Stack</div>
-                  <div className="flex-1 h-px bg-white/10" />
-                </div>
-                
-                <div className="grid grid-cols-4 gap-3">
-                  {[
-                    { name: "Next.js", type: "Frontend", highlight: true },
-                    { name: "React", type: "Frontend", highlight: false },
-                    { name: "TypeScript", type: "Language", highlight: true },
-                    { name: "PostgreSQL", type: "Database", highlight: true },
-                    { name: "WebSocket", type: "Real-time", highlight: true },
-                    { name: "TailwindCSS", type: "Styling", highlight: false },
-                    { name: "Framer Motion", type: "Animation", highlight: false },
-                    { name: "Vercel", type: "Deploy", highlight: false }
-                  ].map((tech, i) => (
-                    <div 
-                      key={i}
-                      className={`group relative border border-white/10 p-3 hover:border-white/20 transition-colors
-                        ${tech.highlight ? 'border-l-emerald-500/50' : ''}`}
+                  {project.link ? (
+                    <a
+                      href={project.link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-[10px] text-white/40 hover:text-white/60 transition-colors"
                     >
-                      <div className="flex items-center gap-2 mb-2">
-                        <div className={`w-1 h-1 ${tech.highlight ? 'bg-emerald-500/50' : 'bg-white/20'}`} />
-                        <div className="text-[10px] uppercase tracking-wider text-white/40">{tech.type}</div>
-                      </div>
-                      <div className="text-sm text-white/80">{tech.name}</div>
+                      <span className="uppercase tracking-wider">External Link</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  ) : project.route && (
+                    <Link
+                      to={project.route}
+                      className="flex items-center gap-2 text-[10px] text-white/40 hover:text-white/60 transition-colors"
+                    >
+                      <span className="uppercase tracking-wider">View Details</span>
+                      <Command className="w-3 h-3" />
+                    </Link>
+                  )}
+                </div>
+
+                {/* Project Content */}
+                <div className="grid grid-cols-12 gap-8">
+                  {/* Main Info */}
+                  <div className="col-span-4 space-y-4">
+                    <h2 className="text-2xl font-medium">{project.name}</h2>
+                    <p className="text-white/60 text-sm leading-relaxed">
+                      {project.description}
+                    </p>
+                  </div>
+
+                  {/* Metrics */}
+                  <div className="col-span-4">
+                    <div className="text-[10px] uppercase tracking-wider text-white/40 mb-4">Performance Metrics</div>
+                    <div className="space-y-3">
+                      {project.metrics.map((metric, i) => (
+                        <div key={i} className="flex items-center justify-between border border-white/10 p-3">
+                          <div className="text-[10px] uppercase tracking-wider text-white/40">{metric.label}</div>
+                          <div className="text-sm font-medium">{metric.value}</div>
+                        </div>
+                      ))}
                     </div>
-                  ))}
+                  </div>
+
+                  {/* Tech Stack */}
+                  <div className="col-span-4">
+                    <div className="text-[10px] uppercase tracking-wider text-white/40 mb-4">Tech Stack</div>
+                    <div className="grid grid-cols-2 gap-2">
+                      {project.stack.map((tech, i) => (
+                        <div key={i} className="border border-white/10 p-3">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Cpu className="w-3 h-3 text-white/40" />
+                            <div className="text-[10px] uppercase tracking-wider text-white/40">{tech.type}</div>
+                          </div>
+                          <div className="text-sm">{tech.name}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
+            </motion.div>
+          ))}
         </div>
       </div>
     </div>

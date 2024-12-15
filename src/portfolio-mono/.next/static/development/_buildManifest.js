@@ -1,0 +1,1 @@
+self.__BUILD_MANIFEST = {__rewrites:{afterFiles:[],beforeFiles:[{has:void 0,source:"\u002Fportfolio-mono\u002Fportfolio-mono\u002F:path*",destination:"\u002Fportfolio-mono\u002F:path*"}],fallback:[]},sortedPages:["\u002F_app"]};self.__BUILD_MANIFEST_CB && self.__BUILD_MANIFEST_CB()

@@ -41,6 +41,12 @@ export const Navigation = ({ onMenuOpen }: NavigationProps) => {
                   ABOUT
                 </Link>
                 <Link 
+                  to="/projects" 
+                  className={`text-xs sm:text-sm font-space-grotesk tracking-wider ${isActive('/projects') ? 'text-emerald-500' : 'text-white/60 hover:text-white'}`}
+                >
+                  PROJECTS
+                </Link>
+                <Link 
                   to="/projects/unispot" 
                   className={`text-xs sm:text-sm font-space-grotesk tracking-wider ${isActive('/projects/unispot') ? 'text-emerald-500' : 'text-white/60 hover:text-white'}`}
                 >
@@ -89,9 +95,10 @@ export const Navigation = ({ onMenuOpen }: NavigationProps) => {
               {/* Mobile Menu Items with Military-Style Design */}
               {[
                 { path: '/about', label: 'ABOUT', id: '00' },
-                { path: '/projects/unispot', label: 'UNISPOT', id: '01' },
-                { path: '/projects/design', label: 'DESIGN', id: '02' },
-                { path: '/contact', label: 'CONTACT', id: '03' }
+                { path: '/projects', label: 'PROJECTS', id: '01' },
+                { path: '/projects/unispot', label: 'UNISPOT', id: '02' },
+                { path: '/projects/design', label: 'DESIGN', id: '03' },
+                { path: '/contact', label: 'CONTACT', id: '04' }
               ].map((item) => (
                 <Link
                   key={item.path}

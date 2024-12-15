@@ -13,6 +13,7 @@ export const Footer: FC = () => {
               <nav className="space-y-2">
                 <Link to="/" className="block text-xs text-white/60 hover:text-white transition-colors">Home</Link>
                 <Link to="/about" className="block text-xs text-white/60 hover:text-white transition-colors">About</Link>
+                <Link to="/projects" className="block text-xs text-white/60 hover:text-white transition-colors">Projects</Link>
                 <Link to="/projects/design" className="block text-xs text-white/60 hover:text-white transition-colors">Design</Link>
                 <Link to="/contact" className="block text-xs text-white/60 hover:text-white transition-colors">Contact</Link>
               </nav>

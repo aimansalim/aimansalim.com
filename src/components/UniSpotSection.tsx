@@ -97,19 +97,19 @@ export const UniSpotSection = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
             {[
               {
-                title: "REAL-TIME TRACKING",
-                description: "Live occupancy monitoring across multiple campus facilities",
-                specs: ["5ms Latency", "99.9% Uptime", "24/7 Operation"]
+                title: "TACTICAL MONITORING",
+                description: "Secure campus surveillance and occupancy tracking",
+                specs: ["< 5ms Response", "99.9% Combat Ready", "24/7 Active Duty"]
               },
               {
-                title: "SPATIAL ANALYTICS",
-                description: "Advanced space utilization and movement pattern analysis",
-                specs: ["Real-time Analytics", "25+ Buildings", "100+ Zones"]
+                title: "FIELD OPERATIONS",
+                description: "Strategic deployment of resources across campus zones",
+                specs: ["Live Intel Feed", "25 Sectors Mapped", "100+ Hot Zones"]
               },
               {
-                title: "SYSTEM ARCHITECTURE",
-                description: "High-performance distributed system infrastructure",
-                specs: ["Next.js", "PostgreSQL", "WebSocket"]
+                title: "COMMAND CENTER",
+                description: "Mission control infrastructure and deployment systems",
+                specs: ["Next.js Core", "Secure Database", "Live Comms Link"]
               }
             ].map((feature, index) => (
               <div 

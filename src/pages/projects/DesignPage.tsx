@@ -48,12 +48,97 @@ const CornerDecorations = () => (
   </>
 );
 
+const ProjectSection = () => (
+  <div className="relative border border-white/10 p-8 md:p-12">
+    <CornerDecorations />
+    
+    {/* Header */}
+    <div className="flex items-center gap-2 mb-12">
+      <div className="w-1 h-1 bg-white/40" />
+      <div className="text-[10px] uppercase tracking-wider text-white/40">Web Development</div>
+      <div className="flex-1 h-px bg-white/10" />
+    </div>
+
+    {/* Title & Description */}
+    <div className="space-y-8 mb-12">
+      <h2 className="text-4xl font-light tracking-tight">Financial Course Platform</h2>
+      <p className="text-base text-white/60 max-w-2xl leading-relaxed">
+        Led the development of aledellagiusta's financial course platform, creating a high-conversion 
+        landing page that seamlessly integrates with Scalable's infrastructure.
+      </p>
+    </div>
+
+    {/* Project Info Grid */}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+      {/* Link Section */}
+      <div className="space-y-4">
+        <div className="text-sm text-white/40 uppercase tracking-wider">Project URL</div>
+        <a 
+          href="https://aledellagiusta.it" 
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 text-white hover:text-white/80 transition-colors"
+        >
+          <span>aledellagiusta.it</span>
+          <svg 
+            className="w-4 h-4 text-emerald-500" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path 
+              strokeLinecap="round" 
+              strokeLinejoin="round" 
+              strokeWidth={2} 
+              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" 
+            />
+          </svg>
+        </a>
+      </div>
+
+      {/* Metrics Grid */}
+      <div className="col-span-2 grid grid-cols-2 gap-8">
+        <div className="space-y-4">
+          <div className="text-sm text-white/40 uppercase tracking-wider">First Month Sales</div>
+          <div className="text-3xl font-light">40K€+</div>
+        </div>
+        <div className="space-y-4">
+          <div className="text-sm text-white/40 uppercase tracking-wider">Platform Uptime</div>
+          <div className="text-3xl font-light">100%</div>
+        </div>
+      </div>
+    </div>
+
+    {/* Tech Stack */}
+    <div className="space-y-6">
+      <div className="text-sm text-white/40 uppercase tracking-wider">Tech Stack</div>
+      <div className="flex flex-wrap gap-4">
+        {[
+          'React',
+          'TypeScript',
+          'TailwindCSS',
+          'Framer Motion',
+          'Node.js'
+        ].map((tech, index) => (
+          <div 
+            key={index}
+            className="relative border border-white/10 px-4 py-2 hover:border-white/20 transition-colors"
+          >
+            <CornerDecorations />
+            <span className="text-sm">{tech}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+);
+
 export default function DesignPage() {
   const videos: VideoData[] = [
     { id: "P5k2u9DlCho", views: "3.1M" },
     { id: "WQBHdqJTRbE", views: "1.5M" },
+    { id: "bniJeerctfo", views: "1.3M" },
     { id: "t1ruNmcNCpU", views: "1.5M" },
-    { id: "SwYpISNJdMY", views: "1.3M" },
   ];
 
   const bottomVideos: VideoData[] = [
@@ -119,130 +204,115 @@ export default function DesignPage() {
         </div>
 
         {/* Content Gallery */}
-        <div className="relative border border-white/10 overflow-hidden mb-16">
-          {/* System Status Tag */}
-          <div className="absolute top-0 right-0 z-20">
-            <div className="flex items-center border border-white/10 bg-black">
-              <div className="px-3 py-2 border-r border-white/10 flex items-center gap-2">
-                <div className="w-1.5 h-1.5 bg-emerald-500 animate-pulse" />
-                <span className="text-[10px] font-space-grotesk text-white/60 uppercase tracking-wider">Content Status</span>
-              </div>
-              <div className="px-3 py-2">
-                <span className="text-[10px] font-space-grotesk text-white/60 uppercase tracking-wider">Online</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="relative w-full overflow-hidden py-8">
-            {/* Edge Gradients */}
+        <div className="space-y-8 -mx-8 md:-mx-12">
+          {/* Top Row */}
+          <div className="relative overflow-hidden py-4">
             <div className="absolute inset-y-0 left-0 w-16 md:w-32 bg-gradient-to-r from-black to-transparent z-10" />
             <div className="absolute inset-y-0 right-0 w-16 md:w-32 bg-gradient-to-l from-black to-transparent z-10" />
             
-            <div className="flex flex-col gap-8">
-              {/* Top Row */}
-              <div className="relative overflow-hidden" style={{ height: cardHeight }}>
-                <motion.div
-                  className="flex gap-8 md:gap-12 absolute left-0 p-0"
-                  animate={{
-                    x: [-calculateWidth(videos), 0],
-                  }}
-                  transition={{
-                    x: {
-                      repeat: Infinity,
-                      repeatType: "loop",
-                      duration: duration,
-                      ease: "linear",
-                    },
-                  }}
-                  style={{ width: calculateWidth(videos) * 2 }}
+            <motion.div
+              className="flex gap-8 pl-8 md:pl-12"
+              animate={{
+                x: [-calculateWidth(videos), 0],
+              }}
+              transition={{
+                x: {
+                  repeat: Infinity,
+                  repeatType: "loop",
+                  duration: 20,
+                  ease: "linear",
+                },
+              }}
+            >
+              {[...videos, ...videos].map((video, index) => (
+                <motion.a
+                  key={index}
+                  href={`https://youtube.com/watch?v=${video.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative aspect-video w-[320px] flex-none border border-white/10 overflow-hidden"
+                  whileHover={{ scale: 1.02 }}
                 >
-                  {[...videos, ...videos].map((video, index) => (
-                    <div
-                      key={`top-${index}`}
-                      className="relative flex-none"
-                      style={{ width: cardWidth }}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10" />
+                  <img 
+                    src={`https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`}
+                    alt={`Video thumbnail ${index + 1}`}
+                    className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute top-2 right-2 z-20 flex items-center gap-1 text-xs text-white/80">
+                    <span>{video.views}</span>
+                    <svg 
+                      className="w-3 h-3" 
+                      fill="none" 
+                      viewBox="0 0 24 24" 
+                      stroke="currentColor"
                     >
-                      <div className="relative border border-white/10" style={{ height: cardHeight }}>
-                        <img
-                          src={`https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`}
-                          alt={`Content ${index + 1}`}
-                          className="absolute inset-0 w-full h-full object-cover bg-black"
-                          loading="lazy"
-                        />
-                        <div className="absolute -top-3 -right-3 z-50 flex items-center bg-black border border-white/10">
-                          <div className="px-3 py-1.5 flex items-center gap-2">
-                            <svg 
-                              className="text-emerald-500" 
-                              width="12" 
-                              height="12" 
-                              viewBox="0 0 10 10" 
-                              fill="none"
-                            >
-                              <path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" strokeWidth="1"/>
-                            </svg>
-                            <span className="text-[10px] md:text-xs font-space-grotesk text-white/80 uppercase tracking-wider">
-                              {video.views}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </motion.div>
-              </div>
+                      <path 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round" 
+                        strokeWidth={2} 
+                        d="M14 5l7 7m0 0l-7 7m7-7H3" 
+                      />
+                    </svg>
+                  </div>
+                </motion.a>
+              ))}
+            </motion.div>
+          </div>
 
-              {/* Bottom Row */}
-              <div className="relative overflow-hidden" style={{ height: cardHeight }}>
-                <motion.div
-                  className="flex gap-8 md:gap-12 absolute left-0 p-0"
-                  animate={{
-                    x: [0, -calculateWidth(bottomVideos)],
-                  }}
-                  transition={{
-                    x: {
-                      repeat: Infinity,
-                      repeatType: "loop",
-                      duration: duration,
-                      ease: "linear",
-                    },
-                  }}
-                  style={{ width: calculateWidth(bottomVideos) * 2 }}
+          {/* Bottom Row */}
+          <div className="relative overflow-hidden py-4">
+            <div className="absolute inset-y-0 left-0 w-16 md:w-32 bg-gradient-to-r from-black to-transparent z-10" />
+            <div className="absolute inset-y-0 right-0 w-16 md:w-32 bg-gradient-to-l from-black to-transparent z-10" />
+            
+            <motion.div
+              className="flex gap-8 pl-8 md:pl-12"
+              animate={{
+                x: [0, -calculateWidth(bottomVideos)],
+              }}
+              transition={{
+                x: {
+                  repeat: Infinity,
+                  repeatType: "loop",
+                  duration: 20,
+                  ease: "linear",
+                },
+              }}
+            >
+              {[...bottomVideos, ...bottomVideos].map((video, index) => (
+                <motion.a
+                  key={index}
+                  href={`https://youtube.com/watch?v=${video.id}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group relative aspect-video w-[320px] flex-none border border-white/10 overflow-hidden"
+                  whileHover={{ scale: 1.02 }}
                 >
-                  {[...bottomVideos, ...bottomVideos].map((video, index) => (
-                    <div
-                      key={`bottom-${index}`}
-                      className="relative flex-none"
-                      style={{ width: cardWidth }}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10" />
+                  <img 
+                    src={`https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`}
+                    alt={`Video thumbnail ${index + 1}`}
+                    className="w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute top-2 right-2 z-20 flex items-center gap-1 text-xs text-white/80">
+                    <span>{video.views}</span>
+                    <svg 
+                      className="w-3 h-3" 
+                      fill="none" 
+                      viewBox="0 0 24 24" 
+                      stroke="currentColor"
                     >
-                      <div className="relative border border-white/10" style={{ height: cardHeight }}>
-                        <img
-                          src={`https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`}
-                          alt={`Content ${index + 1}`}
-                          className="absolute inset-0 w-full h-full object-cover bg-black"
-                          loading="lazy"
-                        />
-                        <div className="absolute -top-3 -right-3 z-50 flex items-center bg-black border border-white/10">
-                          <div className="px-3 py-1.5 flex items-center gap-2">
-                            <svg 
-                              className="text-emerald-500" 
-                              width="12" 
-                              height="12" 
-                              viewBox="0 0 10 10" 
-                              fill="none"
-                            >
-                              <path d="M2 8L8 2M8 2H3M8 2V7" stroke="currentColor" strokeWidth="1"/>
-                            </svg>
-                            <span className="text-[10px] md:text-xs font-space-grotesk text-white/80 uppercase tracking-wider">
-                              {video.views}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </motion.div>
-              </div>
-            </div>
+                      <path 
+                        strokeLinecap="round" 
+                        strokeLinejoin="round" 
+                        strokeWidth={2} 
+                        d="M14 5l7 7m0 0l-7 7m7-7H3" 
+                      />
+                    </svg>
+                  </div>
+                </motion.a>
+              ))}
+            </motion.div>
           </div>
         </div>
 
@@ -299,103 +369,7 @@ export default function DesignPage() {
           </div>
         </div>
 
-        {/* Web Development Section */}
-        <div className="relative border border-white/10 p-8 mb-16">
-          <CornerDecorations />
-
-          {/* Header */}
-          <div className="relative border border-white/10 p-4 mb-8">
-            <CornerDecorations />
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-px bg-emerald-500" />
-              <span className="text-xs text-emerald-500 uppercase tracking-wider font-medium">Web Development</span>
-            </div>
-          </div>
-
-          {/* Content Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {/* Left Column */}
-            <div className="space-y-6">
-              {/* Title & Description */}
-              <div className="relative border border-white/10 p-4">
-                <CornerDecorations />
-                <h2 className="text-lg text-white font-medium mb-3">Financial Course Platform</h2>
-                <p className="text-zinc-500 text-sm leading-relaxed">
-                  Led the development of aledellagiusta's financial course platform, creating a high-conversion landing page that seamlessly integrates with Scalable's infrastructure.
-                </p>
-              </div>
-
-              {/* Preview */}
-              <div className="relative border border-white/10 p-1">
-                <CornerDecorations />
-                <a 
-                  href="https://aledellagiusta.it" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="block relative overflow-hidden group"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent to-black/80 z-10" />
-                  <div className="absolute bottom-2 left-2 z-20">
-                    <div className="flex items-center gap-2 text-xs text-white/80">
-                      <span className="font-space-grotesk tracking-wider">aledellagiusta.it</span>
-                      <svg 
-                        className="w-3 h-3 text-emerald-500" 
-                        fill="none" 
-                        viewBox="0 0 24 24" 
-                        stroke="currentColor"
-                      >
-                        <path 
-                          strokeLinecap="round" 
-                          strokeLinejoin="round" 
-                          strokeWidth={2} 
-                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" 
-                        />
-                      </svg>
-                    </div>
-                  </div>
-                  <div className="bg-zinc-900 relative" style={{ height: '120px' }}>
-                    <div className="absolute inset-0 flex items-center justify-center border border-white/5">
-                      <div className="text-white/20 text-xs font-space-grotesk tracking-wider">VISIT WEBSITE</div>
-                    </div>
-                  </div>
-                </a>
-              </div>
-
-              {/* Stats */}
-              <div className="grid grid-cols-2 gap-4">
-                <div className="relative border border-white/10 p-4">
-                  <CornerDecorations />
-                  <div className="text-2xl font-medium text-white mb-1">40K€+</div>
-                  <div className="text-[10px] text-zinc-500 uppercase tracking-wider">First Month Sales</div>
-                </div>
-                <div className="relative border border-white/10 p-4">
-                  <CornerDecorations />
-                  <div className="text-2xl font-medium text-white mb-1">100%</div>
-                  <div className="text-[10px] text-zinc-500 uppercase tracking-wider">Uptime</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Column - Tech Stack */}
-            <div className="relative border border-white/10 p-4">
-              <CornerDecorations />
-              <div className="space-y-4">
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-px bg-emerald-500" />
-                  <h3 className="text-xs text-emerald-500 uppercase tracking-wider font-medium">Tech Stack</h3>
-                </div>
-                <div className="grid grid-cols-2 gap-2">
-                  {["React", "TypeScript", "TailwindCSS", "Framer Motion", "Node.js", "AWS"].map((tech, index) => (
-                    <div key={index} className="relative border border-white/10 px-3 py-2 group">
-                      <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-                      <span className="text-[10px] font-space-grotesk text-white/60 uppercase tracking-wider">{tech}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ProjectSection />
 
         {/* Brand Collaborations */}
         <div className="mt-12 grid grid-cols-1 gap-y-6">

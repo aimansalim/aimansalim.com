@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Command, ChevronRight, ExternalLink } from 'lucide-react';
@@ -7,7 +7,6 @@ import { Navigation } from './components/Navigation';
 import UniSpotPage from './pages/projects/UniSpotPage';
 import DesignPage from './pages/projects/DesignPage';
 import SuccessPage from './pages/success';
-import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
 import { ContactForm } from './components/ContactForm';
 import { Footer } from './components/Footer';
@@ -16,13 +15,14 @@ import { UniSpotSection } from './components/UniSpotSection';
 import { StatusIndicator } from './components/StatusIndicator';
 import { ContentCreatorSection } from './components/ContentCreatorSection';
 import { ScrollToTop } from './components/ScrollToTop';
+import ProjectsPage from './pages/ProjectsPage';
 
 function App() {
-  const [, setIsMenuOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const handleMenuOpen = () => {
-    setIsMenuOpen(true);
-  };
+  const handleMenuOpen = useCallback(() => {
+    setIsMenuOpen(prev => !prev);
+  }, []);
 
   return (
     <Router>
@@ -44,39 +44,40 @@ function App() {
                     transition={{ duration: 0.8 }}
                     className="text-center relative"
                   >
-                    <div className="inline-flex items-center space-x-2 mb-12 px-4 py-2 border border-white/10 rounded-sm bg-white/5 backdrop-blur-sm">
+                    <div className="inline-flex items-center space-x-2 mt-24 sm:mt-12 mb-12 px-3 py-1.5 bg-black border border-white/10 rounded-[2px] backdrop-blur-sm relative">
+                      <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent opacity-20" />
                       <StatusIndicator />
-                      
-                      <span className="text-white/60 uppercase tracking-widest text-sm">Working Status: Active</span>
+                      <span className="text-[10px] tracking-[0.2em] text-white/50 uppercase relative">Working Status: Active</span>
                     </div>
                     
                     <h1 className="font-space-grotesk font-medium tracking-tight leading-none mb-12">
-                      <span className="text-[56px] sm:text-[56px] text-zinc-500 block">AIMAN SALIM</span>
-                      <span className="text-[56px] sm:text-[56px] text-white block mt-1">THE CREATOR'S ENGINEER</span>
+                      <span className="text-[40px] sm:text-[56px] text-zinc-500 block">AIMAN SALIM</span>
+                      <span className="text-[40px] sm:text-[56px] text-white block mt-1">THE CREATOR'S ENGINEER</span>
                     </h1>
                     
                     <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-12 leading-relaxed">
                       Building tools I wish I had & designing stuff I want to see.
                     </p>
 
-                    <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6 mb-24">
+                    <div className="flex flex-col sm:flex-row items-center sm:items-center justify-center space-y-3 sm:space-y-0 sm:space-x-6 mb-24 px-4 sm:px-0">
                       <motion.a
                         href="#unispot-section"
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
-                        className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 bg-[#111111] border border-[#1A1A1A] rounded-sm hover:bg-white hover:text-black transition-colors group"
+                        className="w-[240px] flex items-center justify-center px-8 py-4 bg-black border border-white/10 rounded-[2px] hover:bg-white/5 transition-colors group relative overflow-hidden"
                       >
-                        <span className="mr-2 tracking-wider text-sm font-medium">VIEW PROJECTS</span>
-                        <Command className="transition-transform group-hover:rotate-12" />
+                        <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent opacity-20" />
+                        <span className="text-[10px] tracking-[0.2em] text-white/90 uppercase relative">View Projects</span>
+                        <Command className="h-3 w-3 ml-2 transition-transform group-hover:rotate-12 relative" />
                       </motion.a>
                       <motion.a
                         href="#contact"
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
-                        className="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 bg-white text-black hover:bg-zinc-100 rounded-sm transition-colors"
+                        className="w-[240px] flex items-center justify-center px-8 py-4 bg-white text-black rounded-[2px] hover:bg-zinc-100 transition-colors relative overflow-hidden"
                       >
-                        <span className="mr-2 tracking-wider text-sm font-medium">INITIATE CONTACT</span>
-                        <ExternalLink className="h-4 w-4" />
+                        <span className="text-[10px] tracking-[0.2em] uppercase">Initiate Contact</span>
+                        <ExternalLink className="h-3 w-3 ml-2" />
                       </motion.a>
                     </div>
 
@@ -108,13 +109,14 @@ function App() {
 
               {/* Contact Section */}
               <section id="contact" className="py-32 relative">
-                <div className="absolute inset-0 bg-gradient-radial from-blue-500/5 via-transparent to-transparent" />
+                <div className="absolute inset-0 bg-gradient-radial from-white/5 via-transparent to-transparent" />
                 <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 relative">
                   <ContactForm />
                 </div>
               </section>
             </main>
           } />
+          <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/success" element={<SuccessPage />} />
           <Route path="/projects/unispot" element={<UniSpotPage />} />
