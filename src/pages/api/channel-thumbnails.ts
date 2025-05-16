@@ -12,6 +12,47 @@ const getApiBaseUrl = (): string => {
   return '';
 };
 
+// Sample data for production environment where the Python backend isn't available
+const SAMPLE_THUMBNAILS: ApiThumbnail[] = [
+  {
+    id: 'dQw4w9WgXcQ',
+    title: 'Rick Astley - Never Gonna Give You Up (Official Music Video)',
+    imageUrl: 'https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg',
+    quality: 'HD'
+  },
+  {
+    id: '9bZkp7q19f0',
+    title: 'PSY - GANGNAM STYLE(강남스타일) M/V',
+    imageUrl: 'https://img.youtube.com/vi/9bZkp7q19f0/maxresdefault.jpg',
+    quality: 'HD'
+  },
+  {
+    id: 'JGwWNGJdvx8',
+    title: 'Ed Sheeran - Shape of You (Official Music Video)',
+    imageUrl: 'https://img.youtube.com/vi/JGwWNGJdvx8/maxresdefault.jpg',
+    quality: 'HD'
+  },
+  {
+    id: 'kJQP7kiw5Fk',
+    title: 'Luis Fonsi - Despacito ft. Daddy Yankee',
+    imageUrl: 'https://img.youtube.com/vi/kJQP7kiw5Fk/maxresdefault.jpg',
+    quality: 'HD'
+  },
+  {
+    id: 'RgKAFK5djSk',
+    title: 'Wiz Khalifa - See You Again ft. Charlie Puth [Official Video]',
+    imageUrl: 'https://img.youtube.com/vi/RgKAFK5djSk/maxresdefault.jpg',
+    quality: 'HD'
+  }
+];
+
+// Check if we're in a production environment (Cloudflare Pages)
+const isProduction = (): boolean => {
+  return window.location.hostname.includes('pages.dev') || 
+         window.location.hostname === 'aimansalim.com' ||
+         !window.location.hostname.includes('localhost');
+};
+
 /**
  * SERVER-SIDE IMPLEMENTATION
  * This uses the Node.js API to fetch real thumbnails from YouTube
@@ -24,7 +65,15 @@ export async function fetchChannelThumbnails(
   try {
     console.log(`Fetching thumbnails for channel: ${channelUrl}`);
     
-    // Call the server-side API
+    // In production, return sample data
+    if (isProduction()) {
+      console.log('Running in production environment, returning sample thumbnails');
+      // Simulate API delay
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      return SAMPLE_THUMBNAILS;
+    }
+    
+    // Call the server-side API for development environment
     const apiUrl = new URL('/api/channel-thumbnails', window.location.origin);
     apiUrl.searchParams.append('channelUrl', channelUrl);
     
