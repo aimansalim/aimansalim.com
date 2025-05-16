@@ -1,7 +1,7 @@
 # Configuration for Cloudflare Pages
 
 [build]
-  command = "npm run build"
+  command = "npm run build:force"
   publish = "dist"
   
 [build.environment]
