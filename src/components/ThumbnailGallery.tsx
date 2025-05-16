@@ -532,13 +532,22 @@ export const ThumbnailGallery = () => {
                   YouTube Channel URL
                 </label>
                 <div className="flex flex-col sm:flex-row gap-3">
-                  <input
-                    type="text"
-                    value={channelUrl}
-                    onChange={(e) => setChannelUrl(e.target.value)}
-                    placeholder="https://www.youtube.com/@aledellagiusta"
-                    className="w-full bg-black border border-white/10 rounded-sm px-3 py-3 text-white focus:outline-none focus:ring-1 focus:ring-white/30 min-h-[50px] h-[50px]"
-                  />
+                  <div className="relative flex-1">
+                    <input
+                      type="text"
+                      value={channelUrl}
+                      onChange={(e) => setChannelUrl(e.target.value)}
+                      placeholder="https://www.youtube.com/@aledellagiusta"
+                      className="w-full bg-black border border-white/10 rounded-sm px-3 py-3 text-white focus:outline-none focus:ring-1 focus:ring-white/30 min-h-[50px] h-[50px]"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setChannelUrl("https://www.youtube.com/@aledellagiusta")}
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xs text-white/50 hover:text-white/90 transition-colors bg-white/5 px-2 py-1 rounded-sm"
+                    >
+                      Use Example
+                    </button>
+                  </div>
                 </div>
               </div>
               
