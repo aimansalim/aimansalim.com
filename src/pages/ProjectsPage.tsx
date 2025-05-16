@@ -18,14 +18,14 @@ interface Project {
 const projects: Project[] = [
   {
     id: '001',
-    category: 'TACTICAL',
+    category: 'UNIVERSITY',
     status: 'ACTIVE',
     name: 'UNISPOT',
-    description: 'Real-time campus navigation and occupancy tracking system.',
+    description: 'A university project for UNIMORE that displays class schedules and classroom locations across the campus.',
     metrics: [
-      { label: 'Zones', value: '100+' },
-      { label: 'Buildings', value: '25' },
-      { label: 'Users', value: '5000+' }
+      { label: 'Departments', value: '5' },
+      { label: 'Buildings', value: '3' },
+      { label: 'Classrooms', value: '25+' }
     ],
     stack: [
       { name: 'React', type: 'Frontend' },
@@ -39,9 +39,9 @@ const projects: Project[] = [
     category: 'DESIGN LEAD',
     status: 'ACTIVE',
     name: 'ALEDELLAGIUSTA',
-    description: 'Lead designer and creative director with a proven track record in digital design and brand development.',
+    description: 'Lead designer specializing in user psychology and engagement. Expert in creating interfaces that drive user actions and maximize click-through rates.',
     metrics: [
-      { label: 'Designs', value: '110+' },
+      { label: 'Designs', value: 'Hundreds' },
       { label: 'Total Views', value: '160M+' },
       { label: 'Experience', value: '3+ Years' }
     ],
@@ -93,21 +93,21 @@ const projects: Project[] = [
   },
   {
     id: '005',
-    category: 'OPERATIONS',
+    category: 'AI PIONEER',
     status: 'BETA',
-    name: 'BOOLD AI',
-    description: 'AI-powered copywriting tool for businesses and entrepreneurs.',
+    name: 'SAFEINTELLIGENCE.CO',
+    description: 'AI-powered solution started in 2021, before the mainstream AI boom. Early adopter of large language models for business applications.',
     metrics: [
-      { label: 'Response Time', value: '< 5ms' },
+      { label: 'Started', value: '2021' },
       { label: 'Uptime', value: '99.9%' },
-      { label: 'Users', value: '500+' }
+      { label: 'AI Models', value: '3+' }
     ],
     stack: [
       { name: 'GPT-4', type: 'AI' },
       { name: 'Next.js', type: 'Frontend' },
       { name: 'PostgreSQL', type: 'Database' }
     ],
-    link: 'https://boold.co'
+    link: 'https://safeintelligence.co'
   }
 ];
 
@@ -130,7 +130,7 @@ export default function ProjectsPage() {
           <CornerDecorations />
           <div className="flex items-center gap-2 mb-6">
             <div className="w-1 h-1 bg-white/40" />
-            <div className="text-[10px] uppercase tracking-wider text-white/40">Mission Control</div>
+            <div className="text-[10px] uppercase tracking-wider text-white/40">Project Portfolio</div>
             <div className="flex-1 h-px bg-white/10" />
             <div className="text-[10px] uppercase tracking-wider text-white/40">Projects: {projects.length}</div>
           </div>
@@ -139,9 +139,9 @@ export default function ProjectsPage() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {[
               { icon: Code2, label: 'Active Projects', value: projects.filter(p => p.status === 'ACTIVE').length },
-              { icon: Layers, label: 'Total Stack Items', value: projects.reduce((acc, p) => acc + p.stack.length, 0) },
-              { icon: Box, label: 'Deployments', value: projects.length },
-              { icon: Globe, label: 'Live Systems', value: projects.filter(p => p.status !== 'ARCHIVED').length }
+              { icon: Layers, label: 'Technologies', value: projects.reduce((acc, p) => acc + p.stack.length, 0) },
+              { icon: Box, label: 'Completed', value: projects.length },
+              { icon: Globe, label: 'Live Sites', value: projects.filter(p => p.status !== 'ARCHIVED').length }
             ].map((stat, i) => (
               <div key={i} className="relative border border-white/10 p-4">
                 <CornerDecorations />

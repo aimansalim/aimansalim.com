@@ -536,7 +536,7 @@ export const ThumbnailGallery = () => {
                     type="text"
                     value={channelUrl}
                     onChange={(e) => setChannelUrl(e.target.value)}
-                    placeholder="https://www.youtube.com/@channelname"
+                    placeholder="https://www.youtube.com/@aledellagiusta"
                     className="w-full bg-black border border-white/10 rounded-sm px-3 py-3 text-white focus:outline-none focus:ring-1 focus:ring-white/30 min-h-[50px] h-[50px]"
                   />
                 </div>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 const quotes = [
   "Bury yourself in the work if you want to live forever.",
@@ -66,20 +66,22 @@ const QuotesPage: React.FC = () => {
       onMouseMove={handleMouseMove}
       onClick={handleClick}
     >
-      {/* Subtle background grid */}
-      <div className="absolute inset-0 grid grid-cols-[repeat(40,1fr)] grid-rows-[repeat(40,1fr)] opacity-10 pointer-events-none">
-        {Array.from({ length: 41 }).map((_, i) => (
-          <div key={`h-${i}`} className="absolute left-0 right-0 h-px bg-white/20" style={{ top: `${(i * 2.5)}%` }} />
-        ))}
-        {Array.from({ length: 41 }).map((_, i) => (
-          <div key={`v-${i}`} className="absolute top-0 bottom-0 w-px bg-white/20" style={{ left: `${(i * 2.5)}%` }} />
-        ))}
+      {/* Subtle background grid - simplified for better mobile performance */}
+      <div className="absolute inset-0 opacity-10 pointer-events-none">
+        <div className="h-full w-full grid grid-cols-[repeat(20,1fr)] md:grid-cols-[repeat(40,1fr)] grid-rows-[repeat(20,1fr)] md:grid-rows-[repeat(40,1fr)]">
+          {Array.from({ length: 21 }).map((_, i) => (
+            <div key={`h-${i}`} className="absolute left-0 right-0 h-px bg-white/20" style={{ top: `${(i * 5)}%` }} />
+          ))}
+          {Array.from({ length: 21 }).map((_, i) => (
+            <div key={`v-${i}`} className="absolute top-0 bottom-0 w-px bg-white/20" style={{ left: `${(i * 5)}%` }} />
+          ))}
+        </div>
       </div>
       
-      {/* Custom cursor */}
+      {/* Custom cursor - only show on desktop */}
       {isHovered && (
         <div 
-          className="fixed w-20 h-20 rounded-full bg-white/5 backdrop-blur-sm pointer-events-none z-10 transition-transform duration-100" 
+          className="fixed w-20 h-20 rounded-full bg-white/5 backdrop-blur-sm pointer-events-none z-10 transition-transform duration-100 hidden md:block" 
           style={{ 
             left: mousePosition.x - 40, 
             top: mousePosition.y - 40,
@@ -88,21 +90,23 @@ const QuotesPage: React.FC = () => {
         />
       )}
 
-      {/* Centered quote */}
-      <motion.div
-        className="max-w-xl px-6 text-center"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: isFading ? 0 : 1 }}
-        transition={{ duration: 0.5 }}
-      >
-        <motion.p 
-          className="font-times text-3xl leading-tight tracking-tight cursor-none"
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-        >
-          {quotes[currentQuoteIndex]}
-        </motion.p>
-      </motion.div>
+      {/* Centered quote with AnimatePresence for proper transitions */}
+      <div className="max-w-xl px-6 text-center">
+        <AnimatePresence mode="wait">
+          <motion.p 
+            key={currentQuoteIndex}
+            className="font-times text-2xl md:text-3xl leading-tight tracking-tight cursor-none"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.5 }}
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
+          >
+            {quotes[currentQuoteIndex]}
+          </motion.p>
+        </AnimatePresence>
+      </div>
     </div>
   );
 };
