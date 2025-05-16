@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowUpRight, Code, Briefcase, Palette, Mail, Phone, Globe, ArrowRight, ExternalLink } from 'lucide-react';
+import { ArrowUpRight, Code, Briefcase, Palette, Mail, Globe, ArrowRight, ExternalLink } from 'lucide-react';
 
 interface SectionProps {
   children: React.ReactNode;
@@ -294,24 +294,15 @@ const AboutPage: React.FC = () => {
 
         {/* Contact */}
         <Section title="CONTACT">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <motion.a 
-              href="mailto:aiman@boold.it" 
+              href="mailto:info.boold@gmail.com" 
               className="box-hairline p-6 flex items-center space-x-3 swiss-hover"
               whileHover={{ scale: 1.02 }}
               transition={{ duration: 0.2 }}
             >
               <Mail className="w-4 h-4 stroke-[1px]" />
-              <span className="text-sm link-underline">aiman@boold.it</span>
-            </motion.a>
-            <motion.a 
-              href="tel:+393513721954" 
-              className="box-hairline p-6 flex items-center space-x-3 swiss-hover"
-              whileHover={{ scale: 1.02 }}
-              transition={{ duration: 0.2 }}
-            >
-              <Phone className="w-4 h-4 stroke-[1px]" />
-              <span className="text-sm link-underline">+39 351 372 1954</span>
+              <span className="text-sm link-underline">info.boold@gmail.com</span>
             </motion.a>
             <motion.a 
               href="https://aimansalim.com" 

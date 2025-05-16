@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 import { motion } from 'framer-motion';
 
 const ApiIcon = () => (
@@ -47,8 +47,9 @@ const UniSpotPage = () => {
         <div className="relative border border-white/10 p-6 md:p-8 mb-8">
           <CornerDecorations />
           <div className="flex items-center gap-2 mb-4">
-            <div className="w-4 h-px bg-emerald-500" />
+            <div className="w-12 h-px bg-emerald-500"></div>
             <span className="text-xs md:text-sm text-emerald-500 uppercase tracking-wider font-light">Campus Navigation System</span>
+            <div className="w-12 h-px bg-emerald-500"></div>
           </div>
           <div className="space-y-2 md:space-y-4">
             <h1 className="text-[28px] md:text-[40px] leading-none text-zinc-500">UNISPOT</h1>

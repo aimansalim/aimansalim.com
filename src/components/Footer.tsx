@@ -1,7 +1,21 @@
 import { type FC } from 'react';
 import { Link } from 'react-router-dom';
+import { Mail } from 'lucide-react';
 
 export const Footer: FC = () => {
+  // Define navigation links to match main navigation
+  const navigationLinks = [
+    { path: '/', label: 'Home' },
+    { path: '/about', label: 'About' },
+    { path: '/projects', label: 'Projects' },
+    { path: '/thumbnails', label: 'Thumbnails' },
+    { path: '/projects/design', label: 'Design' },
+    { path: '/contact', label: 'Contact' }
+  ];
+  
+  // Get current year for copyright
+  const currentYear = new Date().getFullYear();
+
   return (
     <footer className="border-t border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -11,11 +25,15 @@ export const Footer: FC = () => {
             <div className="border border-white/10 p-4">
               <h3 className="text-xs font-space-grotesk text-white/40 uppercase tracking-wider mb-4">Navigation</h3>
               <nav className="space-y-2">
-                <Link to="/" className="block text-xs text-white/60 hover:text-white transition-colors">Home</Link>
-                <Link to="/about" className="block text-xs text-white/60 hover:text-white transition-colors">About</Link>
-                <Link to="/projects" className="block text-xs text-white/60 hover:text-white transition-colors">Projects</Link>
-                <Link to="/projects/design" className="block text-xs text-white/60 hover:text-white transition-colors">Design</Link>
-                <Link to="/contact" className="block text-xs text-white/60 hover:text-white transition-colors">Contact</Link>
+                {navigationLinks.map(link => (
+                  <Link 
+                    key={link.path}
+                    to={link.path} 
+                    className="block text-xs text-white/60 hover:text-white transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
               </nav>
             </div>
           </div>
@@ -25,7 +43,11 @@ export const Footer: FC = () => {
             <div className="border border-white/10 p-4">
               <h3 className="text-xs font-space-grotesk text-white/40 uppercase tracking-wider mb-4">Contact</h3>
               <div className="space-y-2">
-                <a href="mailto:info.boold@gmail.com" className="block text-xs text-white/60 hover:text-white transition-colors">
+                <a 
+                  href="mailto:info.boold@gmail.com" 
+                  className="block text-xs text-white/60 hover:text-white transition-colors flex items-center gap-2"
+                >
+                  <Mail className="w-3 h-3" />
                   info.boold@gmail.com
                 </a>
                 <p className="text-xs text-white/60">Milan, Italy</p>
@@ -71,7 +93,9 @@ export const Footer: FC = () => {
         {/* Copyright */}
         <div className="py-4 border-t border-white/10">
           <p className="text-[10px] text-white/40 text-center font-space-grotesk tracking-wider">
-            Aiman Salim &copy; 2024
+            Aiman Salim &copy; {currentYear}
+            {/* Easter egg link to quotes - intentionally subtle */}
+            <Link to="/quotes" className="cursor-default inline-block ml-1 hover:text-white/20 transition-colors" aria-label="Quotes">∞</Link>
           </p>
         </div>
       </div>

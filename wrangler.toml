@@ -1,0 +1,32 @@
+name = "aimansalim-portfolio"
+compatibility_date = "2023-10-30"
+
+[build]
+command = "npm run build"
+output_dir = "dist"
+
+[[routes]]
+pattern = "/api/channel-thumbnails"
+script = "server.js"
+
+[[routes]]
+pattern = "/api/thumbnails/download"
+script = "server.js"
+
+[[routes]]
+pattern = "/api/thumbnails/collage"
+script = "server.js"
+
+[[routes]]
+pattern = "/api/*"
+script = "server.js"
+
+[[routes]]
+pattern = "/*"
+static = "dist"
+
+[env.production]
+API_URL = "https://api.aimansalim.com"
+
+[env.staging]
+API_URL = "https://staging-api.aimansalim.com" 

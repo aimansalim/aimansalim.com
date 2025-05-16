@@ -10,6 +10,16 @@ export const Navigation = ({ onMenuOpen }: NavigationProps) => {
   const location = useLocation();
 
   const isActive = (path: string) => location.pathname === path;
+  
+  // Centralized navigation items for consistency
+  const navigationItems = [
+    { path: '/', label: 'HOME', id: '00', mobileOnly: true },
+    { path: '/about', label: 'ABOUT', id: '01' },
+    { path: '/projects', label: 'PROJECTS', id: '02' },
+    { path: '/thumbnails', label: 'THUMBNAILS', id: '03' },
+    { path: '/projects/design', label: 'DESIGN', id: '04' },
+    { path: '/contact', label: 'CONTACT', id: '05', isButton: true }
+  ];
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 p-4">
@@ -34,37 +44,21 @@ export const Navigation = ({ onMenuOpen }: NavigationProps) => {
 
               {/* Desktop Navigation */}
               <div className="hidden md:flex items-center space-x-8">
-                <Link 
-                  to="/about" 
-                  className={`text-xs sm:text-sm font-space-grotesk tracking-wider ${isActive('/about') ? 'text-emerald-500' : 'text-white/60 hover:text-white'}`}
-                >
-                  ABOUT
-                </Link>
-                <Link 
-                  to="/projects" 
-                  className={`text-xs sm:text-sm font-space-grotesk tracking-wider ${isActive('/projects') ? 'text-emerald-500' : 'text-white/60 hover:text-white'}`}
-                >
-                  PROJECTS
-                </Link>
-                <Link 
-                  to="/projects/unispot" 
-                  className={`text-xs sm:text-sm font-space-grotesk tracking-wider ${isActive('/projects/unispot') ? 'text-emerald-500' : 'text-white/60 hover:text-white'}`}
-                >
-                  UNISPOT
-                </Link>
-                <Link 
-                  to="/projects/design" 
-                  className={`text-xs sm:text-sm font-space-grotesk tracking-wider ${isActive('/projects/design') ? 'text-emerald-500' : 'text-white/60 hover:text-white'}`}
-                >
-                  DESIGN
-                </Link>
-                <Link 
-                  to="/contact" 
-                  className={`px-3 py-1.5 text-xs sm:text-sm font-space-grotesk tracking-wider border border-white/20 hover:border-white/40 transition-colors 
-                    ${isActive('/contact') ? 'text-emerald-500 border-emerald-500' : 'text-white/60 hover:text-white'}`}
-                >
-                  CONTACT
-                </Link>
+                {navigationItems.filter(item => !item.mobileOnly).map((item) => (
+                  <Link 
+                    key={item.path}
+                    to={item.path} 
+                    className={`text-xs sm:text-sm font-space-grotesk tracking-wider ${
+                      item.isButton 
+                        ? `px-3 py-1.5 border border-white/20 hover:border-white/40 transition-colors ${
+                            isActive(item.path) ? 'text-emerald-500 border-emerald-500' : 'text-white/60 hover:text-white'
+                          }`
+                        : isActive(item.path) ? 'text-emerald-500' : 'text-white/60 hover:text-white'
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                ))}
               </div>
 
               {/* Mobile Menu Button */}
@@ -93,13 +87,7 @@ export const Navigation = ({ onMenuOpen }: NavigationProps) => {
           >
             <div className="p-4 space-y-4">
               {/* Mobile Menu Items with Military-Style Design */}
-              {[
-                { path: '/about', label: 'ABOUT', id: '00' },
-                { path: '/projects', label: 'PROJECTS', id: '01' },
-                { path: '/projects/unispot', label: 'UNISPOT', id: '02' },
-                { path: '/projects/design', label: 'DESIGN', id: '03' },
-                { path: '/contact', label: 'CONTACT', id: '04' }
-              ].map((item) => (
+              {navigationItems.map((item) => (
                 <Link
                   key={item.path}
                   to={item.path}

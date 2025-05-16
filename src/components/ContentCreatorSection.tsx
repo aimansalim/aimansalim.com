@@ -1,4 +1,4 @@
-import React from 'react';
+// import React from 'react';
 import { motion } from 'framer-motion';
 import { ContentGallery } from './ContentGallery';
 
@@ -102,9 +102,10 @@ export const ContentCreatorSection = () => {
             <div className="space-y-8">
               <div className="space-y-2">
                 <h2 className="font-space-grotesk font-medium tracking-tight leading-none mb-16">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="w-4 h-px bg-emerald-500" />
-                    <span className="text-sm text-emerald-500 uppercase tracking-wider">Content System</span>
+                  <div className="flex items-center justify-center gap-2 mb-2">
+                    <div className="w-12 h-px bg-emerald-500"></div>
+                    <span className="text-sm text-emerald-500 uppercase tracking-wider font-light">Content Creation</span>
+                    <div className="w-12 h-px bg-emerald-500"></div>
                   </div>
                   <span className="text-[40px] text-zinc-500 block">GRAPHIC DESIGN</span>
                   <span className="text-[40px] text-white block mt-1">THUMBNAILS</span>

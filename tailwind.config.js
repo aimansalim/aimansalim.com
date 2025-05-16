@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+module.exports = {
   content: [
     './index.html',
     './src/**/*.{js,ts,jsx,tsx}',
@@ -11,6 +11,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Space Grotesk', 'sans-serif'],
+        times: ['Times New Roman', 'serif'],
       },
       animation: {
         'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',

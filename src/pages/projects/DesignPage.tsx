@@ -134,6 +134,9 @@ const ProjectSection = () => (
 );
 
 export default function DesignPage() {
+  // Get current year for dynamic dates
+  const currentYear = new Date().getFullYear();
+  
   const videos: VideoData[] = [
     { id: "P5k2u9DlCho", views: "3.1M" },
     { id: "WQBHdqJTRbE", views: "1.5M" },
@@ -149,7 +152,6 @@ export default function DesignPage() {
   ];
 
   const cardWidth = 280;
-  const cardHeight = Math.floor(cardWidth * (9/16));
   const gapSize = 40;
   const duration = 80;
 
@@ -184,8 +186,9 @@ export default function DesignPage() {
         <div className="relative border border-white/10 p-6 md:p-8 mb-16">
           <CornerDecorations />
           <div className="flex items-center gap-2 mb-4">
-            <div className="w-4 h-px bg-emerald-500" />
+            <div className="w-12 h-px bg-emerald-500"></div>
             <span className="text-xs md:text-sm text-emerald-500 uppercase tracking-wider font-light">Content Creation</span>
+            <div className="w-12 h-px bg-emerald-500"></div>
           </div>
           <div className="space-y-2 md:space-y-4">
             <h1 className="text-[28px] md:text-[40px] leading-none text-zinc-500">DESIGN</h1>
@@ -338,7 +341,7 @@ export default function DesignPage() {
               <div className="flex items-start gap-4">
                 <div className="w-px h-full bg-white/10" />
                 <div>
-                  <div className="text-white text-sm font-medium mb-1">2024</div>
+                  <div className="text-white text-sm font-medium mb-1">{currentYear}</div>
                   <div className="text-zinc-500 text-sm">Continued evolution of design system and brand identity.</div>
                 </div>
               </div>

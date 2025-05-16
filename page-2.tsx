@@ -1,13 +1,15 @@
-import Link from "next/link"
-import Image from "next/image"
-import { DottedImage } from "./components/dotted-image"
+import React from 'react'
+import { Link } from 'react-router-dom'
 
 export default function Page() {
+  // Get current year for dynamic dates
+  const currentYear = new Date().getFullYear();
+  
   return (
     <div className="min-h-screen bg-black text-white font-space-grotesk">
       <header className="fixed top-0 w-full p-6 flex justify-between items-center z-50">
-        <Link href="/">
-          <Image
+        <Link to="/">
+          <img
             src="/placeholder.svg"
             alt="Logo"
             width={40}
@@ -16,10 +18,10 @@ export default function Page() {
           />
         </Link>
         <nav className="space-x-8">
-          <Link href="/projects" className="text-sm uppercase tracking-wider hover:text-emerald-500">
+          <Link to="/projects" className="text-sm uppercase tracking-wider hover:text-emerald-500">
             Projects
           </Link>
-          <Link href="/about" className="text-sm uppercase tracking-wider hover:text-emerald-500">
+          <Link to="/about" className="text-sm uppercase tracking-wider hover:text-emerald-500">
             About
           </Link>
         </nav>
@@ -28,11 +30,12 @@ export default function Page() {
       <main className="pt-24 px-6 max-w-6xl mx-auto">
         <div className="grid md:grid-cols-[300px,1fr] gap-12 mb-20">
           <div className="relative aspect-square">
-            <DottedImage
+            <img
               src="https://uploads-ssl.webflow.com/6481cd195a1b6affcccd1c08/6481e7306f5db9f2d072ff7c_Untitled%20design%20(2).png"
               alt="Profile visualization"
               width={300}
               height={300}
+              className="w-full h-full object-cover object-center"
             />
           </div>
           <div className="space-y-6">
@@ -70,7 +73,7 @@ export default function Page() {
           
           <div className="space-y-12">
             <div className="grid md:grid-cols-[200px,1fr] gap-8">
-              <div className="text-sm">2021 to 2024</div>
+              <div className="text-sm">2021 to {currentYear}</div>
               <div className="space-y-4">
                 <div className="grid grid-cols-[100px,1fr] gap-4">
                   <span className="text-zinc-500 uppercase text-sm">Company</span>
@@ -179,21 +182,21 @@ export default function Page() {
       <footer className="border-t border-zinc-800 mt-20">
         <div className="max-w-6xl mx-auto px-6 py-8 flex justify-between items-center">
           <div className="flex space-x-8">
-            <Link href="/projects" className="text-sm uppercase tracking-wider hover:text-emerald-500">
+            <Link to="/projects" className="text-sm uppercase tracking-wider hover:text-emerald-500">
               Projects
             </Link>
-            <Link href="/about" className="text-sm uppercase tracking-wider hover:text-emerald-500">
+            <Link to="/about" className="text-sm uppercase tracking-wider hover:text-emerald-500">
               About
             </Link>
-            <Link href="https://github.com" className="text-sm uppercase tracking-wider hover:text-emerald-500">
+            <a href="https://github.com" className="text-sm uppercase tracking-wider hover:text-emerald-500">
               Github
-            </Link>
-            <Link href="https://linkedin.com" className="text-sm uppercase tracking-wider hover:text-emerald-500">
+            </a>
+            <a href="https://linkedin.com" className="text-sm uppercase tracking-wider hover:text-emerald-500">
               LinkedIn
-            </Link>
+            </a>
           </div>
           <div className="text-sm text-zinc-500">
-            Carlos Melegrío © 2024
+            Carlos Melegrío © {currentYear}
           </div>
         </div>
       </footer>

@@ -34,6 +34,9 @@ export const ExperienceSection = () => {
     triggerOnce: true,
     threshold: 0.1
   });
+  
+  // Get current year for dynamic dates
+  const currentYear = new Date().getFullYear();
 
   const experiences = [
     {
@@ -53,7 +56,7 @@ export const ExperienceSection = () => {
     {
       Icon: SystemIcon,
       title: "SYSTEM ARCHITECTURE",
-      period: "2024 - PRESENT",
+      period: `${currentYear} - PRESENT`,
       description: "Designing and implementing scalable architectures with high-grade security standards for enterprise applications.",
       technologies: ["CLOUD.INFRA", "SECURITY", "PERF.OPT"]
     }
@@ -72,9 +75,10 @@ export const ExperienceSection = () => {
           transition={{ duration: 0.6 }}
         >
           <h2 className="font-space-grotesk font-medium tracking-tight leading-none mb-16">
-            <div className="flex items-center gap-2 mb-2">
-              <div className="w-4 h-px bg-emerald-500" />
-              <span className="text-sm text-emerald-500 uppercase tracking-wider font-light">Professional History</span>
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <div className="w-12 h-px bg-emerald-500"></div>
+              <span className="text-sm text-emerald-500 uppercase tracking-wider font-light">Professional Experience</span>
+              <div className="w-12 h-px bg-emerald-500"></div>
             </div>
             <span className="text-[40px] text-zinc-500 block">WORK</span>
             <span className="text-[40px] text-white block mt-1">EXPERIENCE</span>

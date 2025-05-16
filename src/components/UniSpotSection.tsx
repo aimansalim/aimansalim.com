@@ -22,8 +22,9 @@ export const UniSpotSection = () => {
           <div className="text-center space-y-4">
             <h2 className="font-space-grotesk font-medium tracking-tight leading-none">
               <div className="flex items-center justify-center gap-2 mb-2">
-                <div className="w-4 h-px bg-emerald-500" />
+                <div className="w-12 h-px bg-emerald-500"></div>
                 <span className="text-sm text-emerald-500 uppercase tracking-wider font-light">Navigation System</span>
+                <div className="w-12 h-px bg-emerald-500"></div>
               </div>
               <span className="text-[40px] text-zinc-500 block">UNISPOT</span>
               <span className="text-[40px] text-white block mt-1">UNIMORE MODENA</span>
