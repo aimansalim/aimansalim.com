@@ -149,7 +149,7 @@ export default function ProjectsPage() {
                   <stat.icon className="w-3 h-3 text-white/40" />
                   <div className="text-[10px] uppercase tracking-wider text-white/40">{stat.label}</div>
                 </div>
-                <div className="text-2xl font-medium">{stat.value}</div>
+                <div className="text-xl md:text-2xl font-medium">{stat.value}</div>
               </div>
             ))}
           </div>
@@ -166,10 +166,10 @@ export default function ProjectsPage() {
               className="relative border border-white/10 hover:border-white/20 transition-colors"
             >
               <CornerDecorations />
-              <div className="p-6 md:p-8">
+              <div className="p-4 sm:p-6 md:p-8">
                 {/* Project Header */}
-                <div className="flex items-center justify-between mb-8">
-                  <div className="flex items-center gap-4">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
+                  <div className="flex flex-wrap items-center gap-4">
                     <div className="flex items-center gap-2">
                       <div className="w-1 h-1 bg-emerald-500/50" />
                       <div className="text-[10px] uppercase tracking-wider text-white/40">{project.category}</div>
@@ -206,9 +206,9 @@ export default function ProjectsPage() {
                 </div>
 
                 {/* Project Content */}
-                <div className="grid grid-cols-12 gap-8">
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-8">
                   {/* Main Info */}
-                  <div className="col-span-4 space-y-4">
+                  <div className="col-span-1 md:col-span-4 space-y-4 mb-6 md:mb-0">
                     <h2 className="text-2xl font-medium">{project.name}</h2>
                     <p className="text-white/60 text-sm leading-relaxed">
                       {project.description}
@@ -216,7 +216,7 @@ export default function ProjectsPage() {
                   </div>
 
                   {/* Metrics */}
-                  <div className="col-span-4">
+                  <div className="col-span-1 md:col-span-4 mb-6 md:mb-0">
                     <div className="text-[10px] uppercase tracking-wider text-white/40 mb-4">Performance Metrics</div>
                     <div className="space-y-3">
                       {project.metrics.map((metric, i) => (
@@ -229,7 +229,7 @@ export default function ProjectsPage() {
                   </div>
 
                   {/* Tech Stack */}
-                  <div className="col-span-4">
+                  <div className="col-span-1 md:col-span-4">
                     <div className="text-[10px] uppercase tracking-wider text-white/40 mb-4">Tech Stack</div>
                     <div className="grid grid-cols-2 gap-2">
                       {project.stack.map((tech, i) => (
