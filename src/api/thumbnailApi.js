@@ -113,6 +113,22 @@ async function downloadThumbnails(channelUrl, startDate, endDate) {
           if (!line) continue;
           
           try {
+            // Check if this is a video ID directly from yt-dlp output
+            if (line.trim().match(/^[a-zA-Z0-9_-]{11}$/)) {
+              const videoId = line.trim();
+              console.log(`[API] Found direct video ID: ${videoId}`);
+              
+              // Add as thumbnail
+              thumbnails.push({
+                id: videoId,
+                title: `YouTube Video (${videoId})`,
+                imageUrl: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
+                quality: 'Standard'
+              });
+              
+              continue;
+            }
+            
             const message = JSON.parse(line);
             
             if (message.type === 'thumbnail') {
@@ -151,9 +167,16 @@ async function downloadThumbnails(channelUrl, startDate, endDate) {
               console.log(`[Python debug] ${message.message}`);
             } else if (message.type === 'status') {
               console.log(`[Python status] ${message.message}`);
+              
+              // If the script found videos but isn't processing them, extract the count
+              const videoFoundMatch = message.message.match(/Found (\d+) videos/);
+              if (videoFoundMatch && parseInt(videoFoundMatch[1]) > 0) {
+                console.log(`[API] Python script found ${videoFoundMatch[1]} videos but isn't processing them`);
+              }
             }
           } catch (parseError) {
-            console.error(`[API] JSON parse error for line: ${line}`, parseError);
+            // This might be direct output from yt-dlp with video IDs
+            console.log(`[API] Non-JSON output: ${line}`);
           }
         }
       } catch (error) {
@@ -173,16 +196,82 @@ async function downloadThumbnails(channelUrl, startDate, endDate) {
       
       if (code !== 0) {
         console.error(`[API] Process terminated with code ${code}: ${errorMessage}`);
+        
+        // If we have thumbnails despite the error, return them anyway
+        if (thumbnails.length > 0) {
+          console.log(`[API] Returning ${thumbnails.length} thumbnails despite process error`);
+          return resolve(thumbnails);
+        }
+        
         return reject(new Error(`Process terminated with code ${code}: ${errorMessage}`));
       }
       
       if (thumbnails.length === 0) {
         console.warn("[API] No thumbnails found from the Python script");
-        return reject(new Error("No thumbnails found for this channel"));
-      } else {
-        console.log(`[API] Successfully found ${thumbnails.length} thumbnails`);
+        
+        // Try to get video IDs directly using yt-dlp
+        console.log("[API] Attempting to get video IDs directly with yt-dlp");
+        
+        const ytDlpArgs = [
+          '--get-id',
+          '--no-download',
+          '--no-warnings',
+          '--flat-playlist',
+          '--playlist-end', '40',
+          '--match-filter', '!is_shorts & duration > 60',  // Exclude shorts and videos shorter than 60 seconds
+          `https://www.youtube.com/@${channelUrl.replace(/^.*@/, '')}`
+        ];
+        
+        if (startDate && endDate) {
+          ytDlpArgs.push('--dateafter', startDate);
+          ytDlpArgs.push('--datebefore', endDate);
+        }
+        
+        const ytDlpProcess = spawn('yt-dlp', ytDlpArgs, {
+          cwd: THUMBNAIL_DIR
+        });
+        
+        const videoIds = [];
+        
+        ytDlpProcess.stdout.on('data', (data) => {
+          const lines = data.toString().trim().split('\n');
+          for (const line of lines) {
+            if (line.trim().match(/^[a-zA-Z0-9_-]{11}$/)) {
+              videoIds.push(line.trim());
+            }
+          }
+        });
+        
+        ytDlpProcess.stderr.on('data', (data) => {
+          console.error(`[yt-dlp stderr] ${data}`);
+        });
+        
+        ytDlpProcess.on('close', (ytDlpCode) => {
+          if (ytDlpCode !== 0) {
+            console.error(`[API] yt-dlp process exited with code ${ytDlpCode}`);
+            return reject(new Error("No thumbnails found for this channel"));
+          }
+          
+          if (videoIds.length === 0) {
+            return reject(new Error("No thumbnails found for this channel"));
+          }
+          
+          // Create thumbnails from video IDs
+          const directThumbnails = videoIds.map(videoId => ({
+            id: videoId,
+            title: `YouTube Video (${videoId})`,
+            imageUrl: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
+            quality: 'Standard'
+          }));
+          
+          console.log(`[API] Found ${directThumbnails.length} video IDs directly with yt-dlp`);
+          resolve(directThumbnails);
+        });
+        
+        return;
       }
       
+      console.log(`[API] Successfully found ${thumbnails.length} thumbnails`);
       resolve(thumbnails);
     });
     

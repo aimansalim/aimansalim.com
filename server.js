@@ -14,6 +14,8 @@ app.use(cors({
     'http://127.0.0.1:5173',
     'https://thumbnail-downloader.pages.dev',
     'https://staging.thumbnail-downloader.pages.dev',
+    'https://aimansalim.com',
+    'https://*.aimansalim.com',
     process.env.API_URL || '',
     new URL(process.env.API_URL || 'http://localhost').origin
   ].filter(Boolean),
@@ -54,7 +56,79 @@ app.get('/api/channel-thumbnails', async (req, res) => {
       return res.json(thumbnails);
     } catch (downloadError) {
       console.error('Error in downloadThumbnails:', downloadError);
-      return res.status(500).json({ error: downloadError.message || 'Failed to download thumbnails' });
+      
+      // Try direct yt-dlp approach as a last resort
+      try {
+        console.log('Attempting direct yt-dlp approach');
+        const { spawn } = require('child_process');
+        
+        // Extract channel handle from URL
+        let channelHandle = decodedUrl;
+        if (decodedUrl.includes('@')) {
+          const match = decodedUrl.match(/@([^/\s?&]+)/);
+          if (match && match[1]) {
+            channelHandle = match[1];
+          } else {
+            channelHandle = decodedUrl.replace('https://www.youtube.com/@', '');
+          }
+        }
+        
+        const ytDlpArgs = [
+          '--get-id',
+          '--no-download',
+          '--no-warnings',
+          '--flat-playlist',
+          '--playlist-end', '40',
+          '--match-filter', '!is_shorts & duration > 60',  // Exclude shorts and videos shorter than 60 seconds
+          `https://www.youtube.com/@${channelHandle}`
+        ];
+        
+        if (startDate && endDate) {
+          ytDlpArgs.push('--dateafter', startDate);
+          ytDlpArgs.push('--datebefore', endDate);
+        }
+        
+        const directThumbnails = await new Promise((resolve, reject) => {
+          const ytDlpProcess = spawn('yt-dlp', ytDlpArgs);
+          const videoIds = [];
+          
+          ytDlpProcess.stdout.on('data', (data) => {
+            const lines = data.toString().trim().split('\n');
+            for (const line of lines) {
+              if (line.trim().match(/^[a-zA-Z0-9_-]{11}$/)) {
+                videoIds.push(line.trim());
+              }
+            }
+          });
+          
+          ytDlpProcess.stderr.on('data', (data) => {
+            console.error(`[yt-dlp stderr] ${data}`);
+          });
+          
+          ytDlpProcess.on('close', (ytDlpCode) => {
+            if (ytDlpCode !== 0 || videoIds.length === 0) {
+              reject(new Error("No videos found for this channel"));
+              return;
+            }
+            
+            // Create thumbnails from video IDs
+            const thumbnails = videoIds.map(videoId => ({
+              id: videoId,
+              title: `YouTube Video (${videoId})`,
+              imageUrl: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
+              quality: 'Standard'
+            }));
+            
+            console.log(`Found ${thumbnails.length} video IDs directly with yt-dlp`);
+            resolve(thumbnails);
+          });
+        });
+        
+        return res.json(directThumbnails);
+      } catch (directError) {
+        console.error('Error in direct yt-dlp approach:', directError);
+        return res.status(500).json({ error: downloadError.message || 'Failed to download thumbnails' });
+      }
     }
   } catch (error) {
     console.error('Uncaught error in GET /api/channel-thumbnails:', error);
