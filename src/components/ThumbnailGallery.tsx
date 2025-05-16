@@ -531,23 +531,36 @@ export const ThumbnailGallery = () => {
                 <label className="block text-xs text-white/70 uppercase tracking-wider mb-2">
                   YouTube Channel URL
                 </label>
-                <div className="flex flex-col sm:flex-row gap-3">
+                <div className="flex flex-col gap-3">
                   <div className="relative flex-1">
                     <input
                       type="text"
                       value={channelUrl}
                       onChange={(e) => setChannelUrl(e.target.value)}
                       placeholder="https://www.youtube.com/@aledellagiusta"
-                      className="w-full bg-black border border-white/10 rounded-sm px-3 py-3 text-white focus:outline-none focus:ring-1 focus:ring-white/30 min-h-[50px] h-[50px]"
+                      className="w-full bg-black border border-white/10 rounded-sm px-3 py-3 text-white focus:outline-none focus:ring-1 focus:ring-white/30 min-h-[50px] h-[50px] pr-[90px]"
                     />
                     <button
                       type="button"
                       onClick={() => setChannelUrl("https://www.youtube.com/@aledellagiusta")}
-                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xs text-white/50 hover:text-white/90 transition-colors bg-white/5 px-2 py-1 rounded-sm"
+                      className="absolute right-3 top-1/2 transform -translate-y-1/2 text-xs bg-white/10 hover:bg-white/20 text-white px-2 py-1 rounded-sm transition-colors"
                     >
                       Use Example
                     </button>
                   </div>
+                  
+                  <button
+                    type="submit"
+                    className="w-full bg-white text-black px-5 py-3 rounded-sm hover:bg-white/90 transition-all flex items-center justify-center gap-2 min-h-[50px] h-[50px]"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? (
+                      <RefreshCcw className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Search className="w-4 h-4" />
+                    )}
+                    <span className="text-xs tracking-[0.2em] uppercase">Search Channel</span>
+                  </button>
                 </div>
               </div>
               
@@ -654,23 +667,6 @@ export const ThumbnailGallery = () => {
                     </div>
                   )}
                 </div>
-              </div>
-              
-              <div>
-                <motion.button
-                  type="submit"
-                  whileHover={{ scale: 1.01 }}
-                  whileTap={{ scale: 0.99 }}
-                  disabled={isLoading}
-                  className="w-full bg-white text-black px-5 py-3 rounded-sm hover:bg-white/90 transition-all flex items-center justify-center gap-2 min-h-[50px] h-[50px]"
-                >
-                  {isLoading ? (
-                    <RefreshCcw className="w-4 h-4 animate-spin" />
-                  ) : (
-                    <Search className="w-4 h-4" />
-                  )}
-                  <span className="text-xs tracking-[0.2em] uppercase">Search Channel</span>
-                </motion.button>
               </div>
               
               <div className="text-white/60 text-xs p-3 border border-white/10 bg-black rounded-sm">
