@@ -12,50 +12,9 @@ const getApiBaseUrl = (): string => {
   return '';
 };
 
-// Sample data for production environment where the Python backend isn't available
-const SAMPLE_THUMBNAILS: ApiThumbnail[] = [
-  {
-    id: 'dQw4w9WgXcQ',
-    title: 'Rick Astley - Never Gonna Give You Up (Official Music Video)',
-    imageUrl: 'https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg',
-    quality: 'HD'
-  },
-  {
-    id: '9bZkp7q19f0',
-    title: 'PSY - GANGNAM STYLE(강남스타일) M/V',
-    imageUrl: 'https://img.youtube.com/vi/9bZkp7q19f0/maxresdefault.jpg',
-    quality: 'HD'
-  },
-  {
-    id: 'JGwWNGJdvx8',
-    title: 'Ed Sheeran - Shape of You (Official Music Video)',
-    imageUrl: 'https://img.youtube.com/vi/JGwWNGJdvx8/maxresdefault.jpg',
-    quality: 'HD'
-  },
-  {
-    id: 'kJQP7kiw5Fk',
-    title: 'Luis Fonsi - Despacito ft. Daddy Yankee',
-    imageUrl: 'https://img.youtube.com/vi/kJQP7kiw5Fk/maxresdefault.jpg',
-    quality: 'HD'
-  },
-  {
-    id: 'RgKAFK5djSk',
-    title: 'Wiz Khalifa - See You Again ft. Charlie Puth [Official Video]',
-    imageUrl: 'https://img.youtube.com/vi/RgKAFK5djSk/maxresdefault.jpg',
-    quality: 'HD'
-  }
-];
-
-// Check if we're in a production environment (Cloudflare Pages)
-const isProduction = (): boolean => {
-  return window.location.hostname.includes('pages.dev') || 
-         window.location.hostname === 'aimansalim.com' ||
-         !window.location.hostname.includes('localhost');
-};
-
 /**
- * SERVER-SIDE IMPLEMENTATION
- * This uses the Node.js API to fetch real thumbnails from YouTube
+ * Direct implementation that doesn't rely on backend Python scripts
+ * This will work in both development and production
  */
 export async function fetchChannelThumbnails(
   channelUrl: string,
@@ -65,42 +24,148 @@ export async function fetchChannelThumbnails(
   try {
     console.log(`Fetching thumbnails for channel: ${channelUrl}`);
     
-    // In production, return sample data
-    if (isProduction()) {
-      console.log('Running in production environment, returning sample thumbnails');
-      // Simulate API delay
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      return SAMPLE_THUMBNAILS;
+    // Extract channel ID from URL
+    const channelId = extractChannelIdFromUrl(channelUrl);
+    if (!channelId) {
+      throw new Error('Could not extract channel ID from URL');
     }
     
-    // Call the server-side API for development environment
-    const apiUrl = new URL('/api/channel-thumbnails', window.location.origin);
-    apiUrl.searchParams.append('channelUrl', channelUrl);
+    // Use YouTube's oEmbed API to get video information directly
+    // This doesn't require API keys and works for public videos
+    const videoIds = await fetchRecentVideoIds(channelId);
     
-    if (startDate) apiUrl.searchParams.append('startDate', startDate);
-    if (endDate) apiUrl.searchParams.append('endDate', endDate);
-    
-    console.log(`Sending request to: ${apiUrl.toString()}`);
-    
-    const response = await fetch(apiUrl.toString(), {
-      // Add cache control to avoid stale data
-      headers: {
-        'Cache-Control': 'no-cache'
-      }
-    });
-    
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error(`API error response: ${errorText}`);
-      throw new Error(`API responded with status: ${response.status}`);
+    if (!videoIds || videoIds.length === 0) {
+      throw new Error('No videos found for this channel');
     }
     
-    const thumbnails = await response.json();
-    console.log(`Successfully fetched ${thumbnails.length} thumbnails`);
-    return thumbnails;
+    // Get thumbnail data for each video
+    const thumbnails = await Promise.all(
+      videoIds.map(async (videoId) => {
+        try {
+          const response = await fetch(
+            `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`
+          );
+          
+          if (response.ok) {
+            const data = await response.json();
+            return {
+              id: videoId,
+              title: data.title,
+              imageUrl: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`,
+              quality: 'HD'
+            };
+          } else {
+            console.error(`Failed to get info for video ${videoId}`);
+            return {
+              id: videoId,
+              title: `YouTube Video (${videoId})`,
+              imageUrl: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`,
+              quality: 'unknown'
+            };
+          }
+        } catch (error) {
+          console.error(`Error processing video ${videoId}:`, error);
+          return {
+            id: videoId,
+            title: `YouTube Video (${videoId})`,
+            imageUrl: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`,
+            quality: 'unknown'
+          };
+        }
+      })
+    );
+    
+    return thumbnails.filter(t => t !== null);
   } catch (error: unknown) {
     console.error("Error fetching channel thumbnails:", error);
     throw error; // Let the caller handle the error
+  }
+}
+
+/**
+ * Extract channel ID from various YouTube URL formats
+ */
+function extractChannelIdFromUrl(url: string): string | null {
+  try {
+    // Handle @username format
+    if (url.includes('@')) {
+      const match = url.match(/@([^/\s]+)/);
+      if (match && match[1]) {
+        return '@' + match[1]; // Return with @ prefix
+      }
+    }
+    
+    // Handle /c/channelname format
+    if (url.includes('/c/')) {
+      const match = url.match(/\/c\/([^/\s]+)/);
+      if (match && match[1]) {
+        return 'c/' + match[1];
+      }
+    }
+    
+    // Handle /channel/ID format
+    if (url.includes('/channel/')) {
+      const match = url.match(/\/channel\/([^/\s]+)/);
+      if (match && match[1]) {
+        return match[1];
+      }
+    }
+    
+    return null;
+  } catch (e) {
+    console.error('Error extracting channel ID:', e);
+    return null;
+  }
+}
+
+/**
+ * Fetch recent video IDs from a channel using RSS feed
+ * This is a public API that doesn't require API keys
+ */
+async function fetchRecentVideoIds(channelId: string): Promise<string[]> {
+  try {
+    let feedUrl: string;
+    
+    // Construct feed URL based on channel ID format
+    if (channelId.startsWith('@')) {
+      // Handle @username format
+      feedUrl = `https://www.youtube.com/feeds/videos.xml?user=${channelId.substring(1)}`;
+    } else if (channelId.startsWith('c/')) {
+      // Handle c/channelname format
+      feedUrl = `https://www.youtube.com/feeds/videos.xml?user=${channelId.substring(2)}`;
+    } else {
+      // Handle channel ID format
+      feedUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
+    }
+    
+    // Use a CORS proxy for production
+    const corsProxy = 'https://corsproxy.io/?';
+    const response = await fetch(corsProxy + encodeURIComponent(feedUrl));
+    
+    if (!response.ok) {
+      throw new Error(`Failed to fetch RSS feed: ${response.status}`);
+    }
+    
+    const text = await response.text();
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(text, 'text/xml');
+    
+    // Extract video IDs from entry elements
+    const entries = xmlDoc.querySelectorAll('entry');
+    const videoIds: string[] = [];
+    
+    entries.forEach((entry) => {
+      // Get video ID from the yt:videoId element
+      const videoIdElement = entry.querySelector('yt\\:videoId, videoId');
+      if (videoIdElement && videoIdElement.textContent) {
+        videoIds.push(videoIdElement.textContent);
+      }
+    });
+    
+    return videoIds.slice(0, 20); // Limit to 20 videos
+  } catch (error) {
+    console.error('Error fetching video IDs:', error);
+    return [];
   }
 }
 
