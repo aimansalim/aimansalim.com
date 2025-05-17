@@ -602,29 +602,20 @@ export const ThumbnailGallery = () => {
 
   return (
     <div className="min-h-[70vh] max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative pb-24 flex flex-col justify-center">
-      {/* Simple loading indicator */}
+      {/* Minimal loading indicator */}
       {isLoading && (
         <div className="w-full mb-4">
-          <div className="flex items-center gap-2 mb-2">
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
-              className="w-4 h-4"
-            >
-              <RefreshCcw className="text-blue-500" />
-            </motion.div>
-            <motion.div 
-              className="text-sm text-white/90"
-              animate={{ opacity: [0.7, 1, 0.7] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-            >
-              {loadingProgress.message}
-            </motion.div>
-          </div>
+          <motion.div 
+            className="text-xs text-white/70"
+            animate={{ opacity: [0.6, 1, 0.6] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+          >
+            {loadingProgress.message}
+          </motion.div>
           
-          <div className="w-full bg-zinc-800 h-1.5 rounded-full overflow-hidden">
+          <div className="w-full bg-zinc-800/30 h-0.5 rounded-full overflow-hidden mt-1">
             <motion.div 
-              className="h-full bg-blue-500"
+              className="h-full bg-white/50"
               initial={{ width: '0%' }}
               animate={{ width: `${loadingProgress.percent}%` }}
               transition={{ duration: 0.5 }}
