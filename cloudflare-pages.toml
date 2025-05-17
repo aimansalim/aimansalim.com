@@ -7,13 +7,13 @@
 [build.environment]
   NODE_VERSION = "18"
 
-# Redirects and rewrites
-[[redirects]]
-  from = "/api/*"
-  to = "https://your-api-backend.example.com/api/:splat"
-  status = 200
-  force = true
-  headers = {X-From = "Cloudflare-Pages"}
+# Redirects and rewrites - comment this out since we're using Functions for API
+# [[redirects]]
+#   from = "/api/*"
+#   to = "https://your-api-backend.example.com/api/:splat"
+#   status = 200
+#   force = true
+#   headers = {X-From = "Cloudflare-Pages"}
 
 # Static asset caching
 [[headers]]

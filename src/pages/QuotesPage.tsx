@@ -1,114 +1,118 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+// @ts-ignore
+import { Helmet } from 'react-helmet';
+import { quotes } from '../data/quotes';
 
-const quotes = [
-  "Bury yourself in the work if you want to live forever.",
-  "Legacy is underrated. Immortality is underrated.",
-  "Building something that lasts forever— is forgotten, ignored, yet possible.",
-  "Through extreme commitment to a mission bigger than yourself.",
-  "Your name will live on the moment you forget yourself.",
-  "The work comes first. You are just a vehicle for it.",
-  "Your entire existence gets filtered down to one output.",
-  "It is a beautiful, simple, impossible act of devotion.",
-  "It's selfish, and selfless.",
-  "To put every ounce of your soul into your cause.",
-  "To give your life to something outside yourself,",
-  "That makes other people's lives better.",
-  "Forever is rare.",
-  "Forever is worth chasing.",
-  "Great work is done by people who are not afraid to be great.",
-  "Create what you wish existed.",
-  "Don't wait for permission.",
-  "The more you create, the more you discover who you are.",
-  "Ideas are worthless until you get them out of your head.",
-  "Don't worry about failure. You only have to be right once.",
-  "Make the things you wish existed in the world.",
-  "Done is better than perfect.",
-  "Be the designer of your own destiny."
-];
-
-const QuotesPage: React.FC = () => {
+export default function QuotesPage() {
   const [currentQuoteIndex, setCurrentQuoteIndex] = useState(0);
-  const [isHovered, setIsHovered] = useState(false);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [isFading, setIsFading] = useState(false);
-
-  useEffect(() => {
-    // Automatically cycle through quotes
-    const interval = setInterval(() => {
-      if (!isHovered) {
-        setIsFading(true);
-        setTimeout(() => {
-          setCurrentQuoteIndex((prevIndex) => (prevIndex + 1) % quotes.length);
-          setIsFading(false);
-        }, 500);
-      }
-    }, 5000);
-
-    return () => clearInterval(interval);
-  }, [isHovered]);
-
+  
+  // Function to advance to next quote
+  const nextQuote = () => {
+    if (!isTransitioning) {
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setCurrentQuoteIndex((prevIndex) => (prevIndex + 1) % quotes.length);
+        setIsTransitioning(false);
+      }, 500);
+    }
+  };
+  
+  // Function to go to previous quote
+  const prevQuote = () => {
+    if (!isTransitioning) {
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setCurrentQuoteIndex((prevIndex) => 
+          prevIndex === 0 ? quotes.length - 1 : prevIndex - 1
+        );
+        setIsTransitioning(false);
+      }, 500);
+    }
+  };
+  
+  // Update mouse position for the light effect
   const handleMouseMove = (e: React.MouseEvent) => {
-    setMousePosition({ x: e.clientX, y: e.clientY });
+    setMousePosition({
+      x: e.clientX,
+      y: e.clientY
+    });
   };
-
-  const handleClick = () => {
-    setIsFading(true);
-    setTimeout(() => {
-      setCurrentQuoteIndex((prevIndex) => (prevIndex + 1) % quotes.length);
-      setIsFading(false);
-    }, 500);
-  };
-
+  
+  // Keyboard navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      switch (e.key) {
+        case 'ArrowRight':
+        case ' ':
+        case 'Enter':
+          nextQuote();
+          break;
+        case 'ArrowLeft':
+          prevQuote();
+          break;
+        default:
+          break;
+      }
+    };
+    
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isTransitioning]);
+  
+  // Auto-cycle quotes every 10 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      nextQuote();
+    }, 10000);
+    
+    return () => clearInterval(interval);
+  }, [isTransitioning]);
+  
   return (
-    <div 
-      className="min-h-screen bg-black text-white flex items-center justify-center relative overflow-hidden"
-      onMouseMove={handleMouseMove}
-      onClick={handleClick}
-    >
-      {/* Subtle background grid - simplified for better mobile performance */}
-      <div className="absolute inset-0 opacity-10 pointer-events-none">
-        <div className="h-full w-full grid grid-cols-[repeat(20,1fr)] md:grid-cols-[repeat(40,1fr)] grid-rows-[repeat(20,1fr)] md:grid-rows-[repeat(40,1fr)]">
-          {Array.from({ length: 21 }).map((_, i) => (
-            <div key={`h-${i}`} className="absolute left-0 right-0 h-px bg-white/20" style={{ top: `${(i * 5)}%` }} />
-          ))}
-          {Array.from({ length: 21 }).map((_, i) => (
-            <div key={`v-${i}`} className="absolute top-0 bottom-0 w-px bg-white/20" style={{ left: `${(i * 5)}%` }} />
-          ))}
-        </div>
-      </div>
+    <>
+      <Helmet>
+        <title>Quotes | Aiman Salim</title>
+        <meta name="description" content="Inspirational quotes" />
+      </Helmet>
       
-      {/* Custom cursor - only show on desktop */}
-      {isHovered && (
+      <div 
+        className="min-h-screen flex flex-col items-center justify-center bg-black text-white cursor-pointer relative overflow-hidden"
+        onClick={nextQuote}
+        onMouseMove={handleMouseMove}
+      >
+        {/* Subtle radial gradient background that follows mouse */}
         <div 
-          className="fixed w-20 h-20 rounded-full bg-white/5 backdrop-blur-sm pointer-events-none z-10 transition-transform duration-100 hidden md:block" 
-          style={{ 
-            left: mousePosition.x - 40, 
-            top: mousePosition.y - 40,
-            transform: 'translate(0, 0)'
+          className="absolute w-[40vw] h-[40vw] rounded-full opacity-[0.07] pointer-events-none bg-gradient-radial from-white via-white/50 to-transparent blur-xl transition-all duration-1000 ease-out"
+          style={{
+            left: `${mousePosition.x - 400}px`,
+            top: `${mousePosition.y - 400}px`,
           }}
         />
-      )}
-
-      {/* Centered quote with AnimatePresence for proper transitions */}
-      <div className="max-w-xl px-6 text-center">
-        <AnimatePresence mode="wait">
-          <motion.p 
-            key={currentQuoteIndex}
-            className="font-times text-2xl md:text-3xl leading-tight tracking-tight cursor-none"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.5 }}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-          >
-            {quotes[currentQuoteIndex]}
-          </motion.p>
-        </AnimatePresence>
+        
+        <div className="max-w-4xl w-full px-4 sm:px-6 z-10">
+          <div className="text-center">
+            <div className={`transition-opacity duration-500 ease-in-out ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
+              <p className="text-base sm:text-lg md:text-xl lg:text-2xl font-mono tracking-wide leading-relaxed text-white max-w-3xl mx-auto whitespace-pre-line p-4 sm:py-6">
+                {quotes[currentQuoteIndex]}
+              </p>
+            </div>
+          </div>
+        </div>
+        
+        {/* Subtle grid background */}
+        <div className="absolute inset-0 opacity-10 pointer-events-none">
+          <div className="h-full w-full grid grid-cols-[repeat(20,1fr)] grid-rows-[repeat(20,1fr)]">
+            {Array.from({ length: 21 }).map((_, i) => (
+              <div key={`h-${i}`} className="absolute left-0 right-0 h-px bg-white/20" style={{ top: `${(i * 5)}%` }} />
+            ))}
+            {Array.from({ length: 21 }).map((_, i) => (
+              <div key={`v-${i}`} className="absolute top-0 bottom-0 w-px bg-white/20" style={{ left: `${(i * 5)}%` }} />
+            ))}
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
-};
-
-export default QuotesPage; 
+} 

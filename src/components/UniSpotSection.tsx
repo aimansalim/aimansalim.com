@@ -140,7 +140,7 @@ export const UniSpotSection = () => {
                     {feature.specs.map((spec, i) => (
                       <div 
                         key={i}
-                        className="text-[8px] font-space-grotesk text-white/40 tracking-wider border border-white/10 px-2 py-1"
+                        className="text-[10px] font-space-grotesk text-white/70 tracking-wider border border-white/10 px-2 py-1"
                       >
                         {spec}
                       </div>

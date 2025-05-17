@@ -1,13 +1,13 @@
 import { useState, FormEvent, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RefreshCcw, Download, ArrowDown, Link, Search, Calendar, ChevronDown, ChevronUp, Loader2 } from 'lucide-react';
-import { fetchChannelThumbnails } from '../pages/api/channel-thumbnails';
 
 interface Thumbnail {
   id: string;
   title: string;
   imageUrl: string;
   quality?: string;
+  fallbackUrls?: string[];
 }
 
 type InputTab = 'url' | 'channel';
@@ -143,27 +143,41 @@ export const ThumbnailGallery = () => {
             percent: progress 
           });
           
-          // Fetch video title using oEmbed
-          const response = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`);
-          
-          if (response.ok) {
-            const data = await response.json();
-            // Add thumbnail with actual title
+          // Try to fetch video info from YouTube's oEmbed API
+          try {
+            const response = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`);
+            
+            if (response.ok) {
+              const data = await response.json();
+              thumbnails.push({
+                id: videoId,
+                title: data.title,
+                imageUrl: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
+              });
+              
+              setLoadingProgress({
+                stage: 'processing',
+                message: `Found thumbnail for "${data.title.substring(0, 30)}${data.title.length > 30 ? '...' : ''}"`,
+                percent: progress + 5
+              });
+            } else {
+              throw new Error('oEmbed API failed');
+            }
+          } catch (oembedError) {
+            console.log(`oEmbed API failed for video ${videoId}, trying direct thumbnail`);
+            
+            // If oEmbed fails, just use the video ID as title
             thumbnails.push({
               id: videoId,
-              title: data.title,
-              imageUrl: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
+              title: `YouTube Video (${videoId})`,
+              imageUrl: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
             });
             
-            // Update message to show success
             setLoadingProgress({
               stage: 'processing',
-              message: `Found thumbnail for "${data.title.substring(0, 30)}${data.title.length > 30 ? '...' : ''}"`,
+              message: `Found thumbnail for video ${videoId}`,
               percent: progress + 5
             });
-          } else {
-            // If oEmbed fails, throw an error - don't use fallbacks
-            throw new Error(`Failed to get video info for ${videoId}: ${response.status} ${response.statusText}`);
           }
           
           processedCount++;
@@ -171,9 +185,16 @@ export const ThumbnailGallery = () => {
           // Small pause between requests to not overwhelm
           await new Promise(resolve => setTimeout(resolve, 200));
         } catch (error) {
-          setError(`Error processing video ID ${videoId}: ${error instanceof Error ? error.message : 'Unknown error'}`);
-          setIsLoading(false);
-          return; // Stop processing on error
+          console.error(`Error processing video ID ${videoId}:`, error);
+          
+          // Still add the thumbnail with a generic title
+          thumbnails.push({
+            id: videoId,
+            title: `YouTube Video (${videoId})`,
+            imageUrl: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
+          });
+          
+          processedCount++;
         }
       }
     }
@@ -241,18 +262,46 @@ export const ThumbnailGallery = () => {
       
       setLoadingProgress({ stage: 'fetching', message: fetchMessage, percent: 30 });
       
-      // Use the direct fetchChannelThumbnails function with date range
-      const thumbnails = await fetchChannelThumbnails(
-        channelUrl,
-        formattedStartDate,
-        formattedEndDate
-      );
+      // Use the server API endpoint instead of direct fetch
+      // In development, the API runs on port 3001, in production it's on the same origin
+      const apiBaseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+        ? window.location.origin.replace(/(:\d+)$/, ':3001')
+        : window.location.origin;
+      
+      const apiUrl = new URL('/api/channel-thumbnails', apiBaseUrl);
+      
+      // Add query parameters - use single encoding to avoid double encoding
+      apiUrl.searchParams.append('channelUrl', channelUrl);
+      if (formattedStartDate) apiUrl.searchParams.append('startDate', formattedStartDate);
+      if (formattedEndDate) apiUrl.searchParams.append('endDate', formattedEndDate);
+      
+      console.log(`Fetching from API: ${apiUrl.toString()}`);
+      
+      // Make the API request
+      const response = await fetch(apiUrl.toString());
+      
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `Server responded with status ${response.status}`);
+      }
+      
+      const thumbnails = await response.json();
       
       setLoadingProgress({ stage: 'processing', message: 'Processing thumbnails...', percent: 75 });
       
       // Process the retrieved thumbnails
       if (Array.isArray(thumbnails) && thumbnails.length > 0) {
         console.log(`Received ${thumbnails.length} thumbnails`);
+        
+        // Process thumbnails
+        const processedThumbnails = thumbnails.map(thumbnail => ({
+          ...thumbnail,
+          // Ensure we have the full URL for the image
+          imageUrl: thumbnail.imageUrl.startsWith('http') 
+            ? thumbnail.imageUrl 
+            : `${apiBaseUrl}${thumbnail.imageUrl}`
+        }));
+        
         setLoadingProgress({ 
           stage: 'completing', 
           message: `Loaded ${thumbnails.length} thumbnails${hasDateRange ? ' in date range' : ''}...`, 
@@ -261,7 +310,7 @@ export const ThumbnailGallery = () => {
         
         // Small delay to show the completion message before displaying results
         setTimeout(() => {
-          setExtractedThumbnails(thumbnails);
+          setExtractedThumbnails(processedThumbnails);
           setLoadingProgress({ stage: 'complete', message: `Found ${thumbnails.length} thumbnails`, percent: 100 });
           setIsLoading(false);
         }, 800);
@@ -279,6 +328,8 @@ export const ThumbnailGallery = () => {
         setError('YouTube API key error. Please try again later.');
       } else if (err.message?.includes('quota')) {
         setError('YouTube API quota exceeded. Please try again tomorrow.');
+      } else if (err.message?.includes('CORS') || err.message?.includes('Failed to fetch')) {
+        setError('Network error: Cannot connect to the server. Please check your connection.');
       } else {
         setError(`Error: ${err.message || 'Failed to fetch thumbnails'}`);
       }
@@ -740,14 +791,38 @@ export const ThumbnailGallery = () => {
                       const target = e.target as HTMLImageElement;
                       console.error(`Failed to load image: ${target.src}`);
                       
-                      // Just show an error message instead of trying fallbacks
-                      setError(`Failed to load thumbnail for video ${thumbnail.id}. The image may not be available.`);
+                      // Try YouTube's thumbnail directly if the server image fails
+                      if (!target.src.includes('img.youtube.com')) {
+                        console.log(`Trying YouTube thumbnail directly for ${thumbnail.id}`);
+                        target.src = `https://img.youtube.com/vi/${thumbnail.id}/hqdefault.jpg`;
+                        return;
+                      }
                       
-                      // Set a placeholder that shows it's an error
-                      target.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cline x1='12' y1='8' x2='12' y2='12'%3E%3C/line%3E%3Cline x1='12' y1='16' x2='12.01' y2='16'%3E%3C/line%3E%3C/svg%3E`;
-                      target.style.objectFit = 'contain';
-                      target.style.padding = '20%';
-                      target.style.background = 'rgba(0,0,0,0.8)';
+                      // If already using YouTube image, try different qualities
+                      const videoId = thumbnail.id;
+                      const qualitySequence = [
+                        'maxresdefault.jpg',
+                        'sddefault.jpg',
+                        'hqdefault.jpg',
+                        'mqdefault.jpg',
+                        'default.jpg'
+                      ];
+                      
+                      // Find current quality
+                      const currentQuality = qualitySequence.find(q => target.src.includes(q)) || '';
+                      const currentIndex = qualitySequence.indexOf(currentQuality);
+                      
+                      // Try next quality if available
+                      if (currentIndex >= 0 && currentIndex < qualitySequence.length - 1) {
+                        const nextQuality = qualitySequence[currentIndex + 1];
+                        target.src = `https://img.youtube.com/vi/${videoId}/${nextQuality}`;
+                      } else {
+                        // Show placeholder as last resort
+                        target.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cline x1='12' y1='8' x2='12' y2='12'%3E%3C/line%3E%3Cline x1='12' y1='16' x2='12.01' y2='16'%3E%3C/line%3E%3C/svg%3E`;
+                        target.style.objectFit = 'contain';
+                        target.style.padding = '20%';
+                        target.style.background = 'rgba(0,0,0,0.8)';
+                      }
                     }}
                   />
                 </div>

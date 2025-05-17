@@ -18,6 +18,7 @@ import { ScrollToTop } from './components/ScrollToTop';
 import ProjectsPage from './pages/ProjectsPage';
 import ThumbnailsPage from './pages/ThumbnailsPage';
 import QuotesPage from './pages/QuotesPage';
+import PortfolioPage from './pages/PortfolioPage';
 
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -126,6 +127,7 @@ function App() {
             <Route path="/projects/design" element={<DesignPage />} />
             <Route path="/thumbnails" element={<ThumbnailsPage />} />
             <Route path="/quotes" element={<QuotesPage />} />
+            <Route path="/portfolio" element={<PortfolioPage />} />
             <Route path="/contact" element={
               <div className="pt-32 pb-16">
                 <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">

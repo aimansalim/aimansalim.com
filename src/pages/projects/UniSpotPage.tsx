@@ -25,6 +25,30 @@ const InterfaceIcon = () => (
   </svg>
 );
 
+const MonitoringIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+    <circle cx="12" cy="12" r="9" />
+    <path d="M12 7v5l3 3" />
+  </svg>
+);
+
+const OperationsIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+    <path d="M4 4h16v6H4z" />
+    <path d="M4 14h6v6H4z" />
+    <path d="M14 14h6v6h-6z" />
+  </svg>
+);
+
+const CommandIcon = () => (
+  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
+    <rect x="4" y="4" width="16" height="16" rx="2" />
+    <path d="M9 9h6" />
+    <path d="M9 12h6" />
+    <path d="M9 15h4" />
+  </svg>
+);
+
 const CornerDecorations = () => (
   <>
     <div className="absolute top-0 left-0 h-4 w-4 border-t border-l border-white/20" />
@@ -157,6 +181,107 @@ const UniSpotPage = () => {
                 <p className="text-zinc-400 text-sm">
                   Clean, functional interface that allows students to quickly find and navigate to available study spaces across campus.
                 </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Tactical Features */}
+        <div className="mb-8">
+          <div className="flex items-center gap-2 mb-8">
+            <div className="w-12 h-px bg-emerald-500"></div>
+            <span className="text-xs md:text-sm text-emerald-500 uppercase tracking-wider font-light">Tactical Capabilities</span>
+            <div className="w-12 h-px bg-emerald-500"></div>
+          </div>
+        </div>
+        
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+          <div className="group relative h-[280px]">
+            <div className="absolute inset-0 border border-white/20 -translate-x-2 -translate-y-2 transition-transform group-hover:translate-x-0 group-hover:translate-y-0" />
+            <div className="relative h-full border border-white/20 bg-white/[0.01]">
+              <div className="absolute inset-0 p-8 flex flex-col">
+                <CornerDecorations />
+                <div className="mb-6 text-emerald-500">
+                  <MonitoringIcon />
+                </div>
+                <h3 className="text-white text-lg mb-2">TACTICAL MONITORING</h3>
+                <p className="text-zinc-400 text-sm mb-4">
+                  Secure campus surveillance and occupancy tracking
+                </p>
+                <div className="flex flex-col gap-2 mt-auto">
+                  <div className="flex items-center gap-2">
+                    <div className="w-1 h-1 bg-emerald-500"></div>
+                    <span className="text-white/70 text-xs">&lt; 5ms Response</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-1 h-1 bg-emerald-500"></div>
+                    <span className="text-white/70 text-xs">99.9% Combat Ready</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-1 h-1 bg-emerald-500"></div>
+                    <span className="text-white/70 text-xs">24/7 Active Duty</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="group relative h-[280px]">
+            <div className="absolute inset-0 border border-white/20 -translate-x-2 -translate-y-2 transition-transform group-hover:translate-x-0 group-hover:translate-y-0" />
+            <div className="relative h-full border border-white/20 bg-white/[0.01]">
+              <div className="absolute inset-0 p-8 flex flex-col">
+                <CornerDecorations />
+                <div className="mb-6 text-emerald-500">
+                  <OperationsIcon />
+                </div>
+                <h3 className="text-white text-lg mb-2">FIELD OPERATIONS</h3>
+                <p className="text-zinc-400 text-sm mb-4">
+                  Strategic deployment of resources across campus zones
+                </p>
+                <div className="flex flex-col gap-2 mt-auto">
+                  <div className="flex items-center gap-2">
+                    <div className="w-1 h-1 bg-emerald-500"></div>
+                    <span className="text-white/70 text-xs">Live Intel Feed</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-1 h-1 bg-emerald-500"></div>
+                    <span className="text-white/70 text-xs">25 Sectors Mapped</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-1 h-1 bg-emerald-500"></div>
+                    <span className="text-white/70 text-xs">100+ Hot Zones</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div className="group relative h-[280px]">
+            <div className="absolute inset-0 border border-white/20 -translate-x-2 -translate-y-2 transition-transform group-hover:translate-x-0 group-hover:translate-y-0" />
+            <div className="relative h-full border border-white/20 bg-white/[0.01]">
+              <div className="absolute inset-0 p-8 flex flex-col">
+                <CornerDecorations />
+                <div className="mb-6 text-emerald-500">
+                  <CommandIcon />
+                </div>
+                <h3 className="text-white text-lg mb-2">COMMAND CENTER</h3>
+                <p className="text-zinc-400 text-sm mb-4">
+                  Mission control infrastructure and deployment systems
+                </p>
+                <div className="flex flex-col gap-2 mt-auto">
+                  <div className="flex items-center gap-2">
+                    <div className="w-1 h-1 bg-emerald-500"></div>
+                    <span className="text-white/70 text-xs">Next.js Core</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-1 h-1 bg-emerald-500"></div>
+                    <span className="text-white/70 text-xs">Secure Database</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <div className="w-1 h-1 bg-emerald-500"></div>
+                    <span className="text-white/70 text-xs">Live Comms Link</span>
+                  </div>
+                </div>
               </div>
             </div>
           </div>

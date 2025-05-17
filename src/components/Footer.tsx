@@ -1,17 +1,26 @@
 import { type FC } from 'react';
 import { Link } from 'react-router-dom';
-import { Mail } from 'lucide-react';
+import { Mail, Instagram, Linkedin, FileText, Home, User, Code, Image, Palette, Briefcase, MessageSquare } from 'lucide-react';
 
 export const Footer: FC = () => {
-  // Define navigation links to match main navigation
-  const navigationLinks = [
-    { path: '/', label: 'Home' },
-    { path: '/about', label: 'About' },
-    { path: '/projects', label: 'Projects' },
-    { path: '/thumbnails', label: 'Thumbnails' },
-    { path: '/projects/design', label: 'Design' },
-    { path: '/contact', label: 'Contact' }
-  ];
+  // Define navigation links with proper categorization
+  const linkGroups = {
+    main: [
+      { path: '/', label: 'Home', icon: <Home className="w-3 h-3" /> },
+      { path: '/about', label: 'About', icon: <User className="w-3 h-3" /> },
+      { path: '/contact', label: 'Contact', icon: <MessageSquare className="w-3 h-3" /> }
+    ],
+    projects: [
+      { path: '/projects', label: 'Projects', icon: <Code className="w-3 h-3" /> },
+      { path: '/thumbnails', label: 'Thumbnails', icon: <Image className="w-3 h-3" /> },
+      { path: '/projects/design', label: 'Design', icon: <Palette className="w-3 h-3" /> },
+      { path: '/portfolio', label: 'Portfolio', icon: <Briefcase className="w-3 h-3" /> }
+    ],
+    social: [
+      { url: 'https://www.instagram.com/aimannsalim', label: 'Instagram', icon: <Instagram className="w-3 h-3" /> },
+      { url: 'https://www.linkedin.com/in/aimansalim', label: 'LinkedIn', icon: <Linkedin className="w-3 h-3" /> }
+    ]
+  };
   
   // Get current year for copyright
   const currentYear = new Date().getFullYear();
@@ -20,72 +29,76 @@ export const Footer: FC = () => {
     <footer className="border-t border-white/10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="py-8 grid grid-cols-1 md:grid-cols-3 gap-8">
-          {/* Navigation Links */}
+          {/* Navigation Column */}
           <div className="space-y-4">
-            <div className="border border-white/10 p-4">
-              <h3 className="text-xs font-space-grotesk text-white/40 uppercase tracking-wider mb-4">Navigation</h3>
-              <nav className="space-y-2">
-                {navigationLinks.map(link => (
-                  <Link 
-                    key={link.path}
-                    to={link.path} 
-                    className="block text-xs text-white/60 hover:text-white transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </nav>
+            <h3 className="text-xs font-space-grotesk text-white/40 uppercase tracking-wider mb-4">Navigation</h3>
+            <div className="grid grid-cols-1 gap-3">
+              {linkGroups.main.map(link => (
+                <Link 
+                  key={link.path}
+                  to={link.path} 
+                  className="text-xs text-white/60 hover:text-white transition-colors flex items-center gap-2"
+                >
+                  {link.icon}
+                  <span>{link.label}</span>
+                </Link>
+              ))}
             </div>
           </div>
 
-          {/* Contact Info */}
+          {/* Projects Column */}
           <div className="space-y-4">
-            <div className="border border-white/10 p-4">
-              <h3 className="text-xs font-space-grotesk text-white/40 uppercase tracking-wider mb-4">Contact</h3>
-              <div className="space-y-2">
-                <a 
-                  href="mailto:info.boold@gmail.com" 
-                  className="block text-xs text-white/60 hover:text-white transition-colors flex items-center gap-2"
+            <h3 className="text-xs font-space-grotesk text-white/40 uppercase tracking-wider mb-4">Projects</h3>
+            <div className="grid grid-cols-1 gap-3">
+              {linkGroups.projects.map(link => (
+                <Link 
+                  key={link.path}
+                  to={link.path} 
+                  className="text-xs text-white/60 hover:text-white transition-colors flex items-center gap-2"
                 >
-                  <Mail className="w-3 h-3" />
-                  info.boold@gmail.com
-                </a>
-                <p className="text-xs text-white/60">Milan, Italy</p>
-              </div>
+                  {link.icon}
+                  <span>{link.label}</span>
+                </Link>
+              ))}
             </div>
           </div>
 
-          {/* Social Links */}
+          {/* Contact & Social Column */}
           <div className="space-y-4">
-            <div className="border border-white/10 p-4">
-              <h3 className="text-xs font-space-grotesk text-white/40 uppercase tracking-wider mb-4">Social</h3>
-              <div className="grid grid-cols-2 gap-2">
+            <h3 className="text-xs font-space-grotesk text-white/40 uppercase tracking-wider mb-4">Connect</h3>
+            
+            {/* Contact Info */}
+            <div className="space-y-3 mb-4">
+              <a 
+                href="mailto:info.boold@gmail.com" 
+                className="text-xs text-white/60 hover:text-white transition-colors flex items-center gap-2"
+              >
+                <Mail className="w-3 h-3" />
+                <span>info.boold@gmail.com</span>
+              </a>
+              <p className="text-xs text-white/60 flex items-center gap-2">
+                <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
+                  <circle cx="12" cy="10" r="3" />
+                </svg>
+                <span>Milan, Italy</span>
+              </p>
+            </div>
+            
+            {/* Social Links */}
+            <div className="flex flex-col gap-3">
+              {linkGroups.social.map(link => (
                 <a 
-                  href="https://www.instagram.com/aimannsalim" 
+                  key={link.url}
+                  href={link.url} 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="border border-white/10 px-3 py-2 text-xs text-white/60 hover:bg-white/5 transition-colors flex items-center gap-2"
+                  className="text-xs text-white/60 hover:text-white transition-colors flex items-center gap-2"
                 >
-                  <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
-                    <rect x="2" y="2" width="20" height="20" />
-                    <circle cx="12" cy="12" r="5" />
-                    <circle cx="18" cy="6" r="1" />
-                  </svg>
-                  Instagram
+                  {link.icon}
+                  <span>{link.label}</span>
                 </a>
-                <a 
-                  href="https://www.linkedin.com/in/aimansalim" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="border border-white/10 px-3 py-2 text-xs text-white/60 hover:bg-white/5 transition-colors flex items-center gap-2"
-                >
-                  <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1">
-                    <rect x="2" y="2" width="20" height="20" />
-                    <path d="M8 10v8M8 6v1M16 18v-6c0-2-1-3-3-3s-3 1-3 3" />
-                  </svg>
-                  LinkedIn
-                </a>
-              </div>
+              ))}
             </div>
           </div>
         </div>

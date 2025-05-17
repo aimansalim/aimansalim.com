@@ -374,6 +374,30 @@ export default function DesignPage() {
 
         <ProjectSection />
 
+        {/* Portfolio Link */}
+        <div className="mt-12 mb-12 flex justify-center">
+          <a 
+            href="/portfolio" 
+            className="group relative border border-white/10 px-8 py-4 hover:border-emerald-500/50 transition-colors flex items-center gap-3"
+          >
+            <CornerDecorations />
+            <span className="text-white group-hover:text-emerald-500 transition-colors">View My Portfolio</span>
+            <svg 
+              className="w-4 h-4 text-emerald-500" 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke="currentColor"
+            >
+              <path 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                strokeWidth={2} 
+                d="M14 5l7 7m0 0l-7 7m7-7H3" 
+              />
+            </svg>
+          </a>
+        </div>
+
         {/* Brand Collaborations */}
         <div className="mt-12 grid grid-cols-1 gap-y-6">
           {/* Top Row - Left to Right */}
