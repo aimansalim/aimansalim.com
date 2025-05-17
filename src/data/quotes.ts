@@ -1,42 +1,32 @@
 export const quotes = [
   // Original quote from image
-  "IF YOU DON'T SEPARATE YOURSELF FROM YOUR DISTRACTIONS, YOUR DISTRACTIONS WILL SEPARATE YOU FROM YOUR GOALS AND THE LIFE YOU WANT.",
+  "If you don't separate yourself from your distractions, your distractions will separate you from your goals and the life you want.",
   
-  // Blake Anderson quotes
+  // Selected meaningful quotes
   "You can both hate the personality and respect the competence.",
-  "Cal AI is on pace to be the most copycatted app in history.",
-  "10x will be a $100m company within 1 year.",
   "I will continue to live a healthy life and build tools that help people.",
   "Give me PMF or give me death.",
   "Social media made y'all way too comfortable with disrespecting people and not getting punched in the face for it.",
-  
-  // Zach Pogrob quotes
   "Greatness feeds on insecurity.",
-  "Fonts and letter styling and spacing is unbelievably important.",
   "The big picture is everything.",
   "We don't need to control him. We need to unleash him.",
   "Fame is lonely. The thing that makes you famous usually requires separation. Then you're famous. But you're still separated.",
   "I just want to make stuff I'm proud of.",
-  "I feel most myself walking the streets of NY.",
   "It's crazy how when your mood changes your life changes.",
   "Actions of grandeur > Delusions of grandeur.",
   "Do it for the plot is underrated advice.",
   "Momentum and mind-games. That's all there is.",
-  "Sourdough is a weapon for greatness.",
   "Get addicted to a problem you think about and care about more than any other human on earth.",
   "David beat goliath with a sling and a rock.",
   "Hate yourself a little to make something others love.",
   "Put your soul into something that helps other people become who they are.",
   "Steve Jobs gave everyone on earth a canvas to make art with infinite leverage.",
   "Dominate your niche with blood-thirst and violent intensity.",
-  "Kobe would never have 'built his personal brand'.",
   "Don't get followers without taking them somewhere.",
   "Everything's a copy of a copy of a copy.",
   "Forgiveness is admitting that what happened to you is now part of you. The wound isn't separate from your flesh anymore. It's been absorbed.",
   "The real treasure are the enemies you destroy along the way.",
   "Any tactic to 'grow your audience' will usually have the opposite effect of getting an audience that matters.",
-  
-  // Additional quotes to reach 100
   "The only way to do great work is to love what you do.",
   "If you are not willing to risk the usual, you will have to settle for the ordinary.",
   "The biggest risk is not taking any risk.",
@@ -99,5 +89,17 @@ export const quotes = [
   "What we achieve inwardly will change outer reality.",
   "Don't let yesterday take up too much of today.",
   "You don't have to be great to start, but you have to start to be great.",
-  "The only limit to our realization of tomorrow will be our doubts of today."
+  "The only limit to our realization of tomorrow will be our doubts of today.",
+  "Suffer well. Pain is a tool to become who you are.",
+  "The universe doesn't give you what you want, it gives you what you are.",
+  "Your potential is determined by what you're willing to endure.",
+  "Every next level of your life will demand a different version of you.",
+  "Sometimes you have to run through the rain to avoid getting wet.",
+  "The master has failed more times than the beginner has even tried.",
+  "It's the possibility of having a dream come true that makes life interesting.",
+  "Nothing worth having comes easy.",
+  "Comfort is the enemy of progress.",
+  "You either walk inside your story and own it, or you stand outside your story and hustle for your worthiness.",
+  "Sometimes the wrong choices bring us to the right places.",
+  "Don't let your fear of what could happen make nothing happen."
 ]; 

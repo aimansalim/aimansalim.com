@@ -99,8 +99,8 @@ export default function QuotesPage() {
       content.style.fontSize = '64px';
       content.style.textAlign = 'center';
       content.style.padding = '15%';
-      content.style.letterSpacing = '0.01em';
-      content.style.lineHeight = '1.25';
+      content.style.letterSpacing = '-0.01em';
+      content.style.lineHeight = '1.15';
       content.textContent = quotes[currentQuoteIndex];
       
       container.appendChild(content);
@@ -156,8 +156,8 @@ export default function QuotesPage() {
                 ref={quoteRef}
                 className="w-full max-w-3xl mx-auto relative"
               >
-                <p className="font-condensed text-white tracking-[0.01em] leading-[1.25] text-center text-base sm:text-lg md:text-xl lg:text-2xl px-4 py-6"
-                   style={{ letterSpacing: '0.01em', lineHeight: '1.25' }}>
+                <p className="font-condensed text-white tracking-[-0.01em] leading-[1.15] text-center text-base sm:text-lg md:text-xl lg:text-2xl px-4 py-6"
+                   style={{ letterSpacing: '-0.01em', lineHeight: '1.15' }}>
                   {quotes[currentQuoteIndex]}
                 </p>
                 
