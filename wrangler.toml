@@ -6,29 +6,10 @@ compatibility_flags = []
 # Build configuration
 [build]
 command = "npm run build"
-pages_build_output_dir = "dist"
+output_dir = "dist"
 
-# Routes configuration for functions
-[[routes]]
-pattern = "/api/channel-thumbnails"
-function = "channel-thumbnails"
-
-[[routes]]
-pattern = "/api/thumbnails/download"
-script = "server.js"
-
-[[routes]]
-pattern = "/api/thumbnails/collage"
-script = "server.js"
-
-[[routes]]
-pattern = "/api/*"
-script = "server.js"
-
-# Static assets
-[[routes]]
-pattern = "/*"
-static = "dist"
+[site]
+bucket = "dist"
 
 [env.production]
 API_URL = "https://api.aimansalim.com"
