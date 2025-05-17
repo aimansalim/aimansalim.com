@@ -1,12 +1,8 @@
 export const quotes = [
-  // Original quote from image
+  // Pure motivational quotes
   "If you don't separate yourself from your distractions, your distractions will separate you from your goals and the life you want.",
-  
-  // Selected meaningful quotes
   "You can both hate the personality and respect the competence.",
   "I will continue to live a healthy life and build tools that help people.",
-  "Give me PMF or give me death.",
-  "Social media made y'all way too comfortable with disrespecting people and not getting punched in the face for it.",
   "Greatness feeds on insecurity.",
   "The big picture is everything.",
   "We don't need to control him. We need to unleash him.",
@@ -20,13 +16,11 @@ export const quotes = [
   "David beat goliath with a sling and a rock.",
   "Hate yourself a little to make something others love.",
   "Put your soul into something that helps other people become who they are.",
-  "Steve Jobs gave everyone on earth a canvas to make art with infinite leverage.",
   "Dominate your niche with blood-thirst and violent intensity.",
   "Don't get followers without taking them somewhere.",
   "Everything's a copy of a copy of a copy.",
   "Forgiveness is admitting that what happened to you is now part of you. The wound isn't separate from your flesh anymore. It's been absorbed.",
   "The real treasure are the enemies you destroy along the way.",
-  "Any tactic to 'grow your audience' will usually have the opposite effect of getting an audience that matters.",
   "The only way to do great work is to love what you do.",
   "If you are not willing to risk the usual, you will have to settle for the ordinary.",
   "The biggest risk is not taking any risk.",
@@ -101,5 +95,10 @@ export const quotes = [
   "Comfort is the enemy of progress.",
   "You either walk inside your story and own it, or you stand outside your story and hustle for your worthiness.",
   "Sometimes the wrong choices bring us to the right places.",
-  "Don't let your fear of what could happen make nothing happen."
+  "Don't let your fear of what could happen make nothing happen.",
+  "The harder the battle, the sweeter the victory.",
+  "Be so good they can't ignore you.",
+  "Clarity comes from action, not thought.",
+  "If it doesn't challenge you, it won't change you.",
+  "You were born to win, but to be a winner you must plan to win, prepare to win, and expect to win."
 ]; 
