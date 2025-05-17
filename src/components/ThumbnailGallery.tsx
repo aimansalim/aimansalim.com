@@ -228,6 +228,44 @@ export const ThumbnailGallery = () => {
     return dateStr.replace(/-/g, '');
   };
 
+  // Function to fetch thumbnails from API
+  const fetchThumbnails = async (channelUrl: string, startDate?: string, endDate?: string) => {
+    setIsLoading(true);
+    setError('');
+    
+    try {
+      // Construct the API URL with parameters
+      const apiUrl = new URL('/api/channel-thumbnails', window.location.origin);
+      apiUrl.searchParams.append('channel', channelUrl);
+      
+      if (startDate) apiUrl.searchParams.append('startDate', startDate);
+      if (endDate) apiUrl.searchParams.append('endDate', endDate);
+      
+      console.log(`Fetching thumbnails from: ${apiUrl.toString()}`);
+      
+      const response = await fetch(apiUrl.toString(), {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Server returned ${response.status}: ${response.statusText}`);
+      }
+      
+      const data = await response.json();
+      console.log(`Received ${data.length} thumbnails`);
+      
+      setExtractedThumbnails(data);
+    } catch (err) {
+      console.error('Error fetching thumbnails:', err);
+      setError(err instanceof Error ? err.message : 'Failed to fetch thumbnails');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Function to handle channel URL processing
   const processChannelUrl = async () => {
     if (!channelUrl.trim()) {
@@ -262,65 +300,7 @@ export const ThumbnailGallery = () => {
       
       setLoadingProgress({ stage: 'fetching', message: fetchMessage, percent: 30 });
       
-      // Use the server API endpoint instead of direct fetch
-      // In development, the API runs on port 3001, in production it's on the same origin
-      const apiBaseUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-        ? window.location.origin.replace(/(:\d+)$/, ':3001')
-        : window.location.origin;
-      
-      const apiUrl = new URL('/api/channel-thumbnails', apiBaseUrl);
-      
-      // Add query parameters - use single encoding to avoid double encoding
-      apiUrl.searchParams.append('channelUrl', channelUrl);
-      if (formattedStartDate) apiUrl.searchParams.append('startDate', formattedStartDate);
-      if (formattedEndDate) apiUrl.searchParams.append('endDate', formattedEndDate);
-      
-      console.log(`Fetching from API: ${apiUrl.toString()}`);
-      
-      // Make the API request
-      const response = await fetch(apiUrl.toString());
-      
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.error || `Server responded with status ${response.status}`);
-      }
-      
-      const thumbnails = await response.json();
-      
-      setLoadingProgress({ stage: 'processing', message: 'Processing thumbnails...', percent: 75 });
-      
-      // Process the retrieved thumbnails
-      if (Array.isArray(thumbnails) && thumbnails.length > 0) {
-        console.log(`Received ${thumbnails.length} thumbnails`);
-        
-        // Process thumbnails
-        const processedThumbnails = thumbnails.map(thumbnail => ({
-          ...thumbnail,
-          // Ensure we have the full URL for the image
-          imageUrl: thumbnail.imageUrl.startsWith('http') 
-            ? thumbnail.imageUrl 
-            : `${apiBaseUrl}${thumbnail.imageUrl}`
-        }));
-        
-        setLoadingProgress({ 
-          stage: 'completing', 
-          message: `Loaded ${thumbnails.length} thumbnails${hasDateRange ? ' in date range' : ''}...`, 
-          percent: 90 
-        });
-        
-        // Small delay to show the completion message before displaying results
-        setTimeout(() => {
-          setExtractedThumbnails(processedThumbnails);
-          setLoadingProgress({ stage: 'complete', message: `Found ${thumbnails.length} thumbnails`, percent: 100 });
-          setIsLoading(false);
-        }, 800);
-      } else {
-        console.log('No thumbnails found or empty array returned');
-        setError(hasDateRange ? 
-          'No thumbnails found in this date range. Try a different range or channel.' : 
-          'No thumbnails found for this channel. Try a different channel URL.');
-        setIsLoading(false);
-      }
+      await fetchThumbnails(channelUrl, formattedStartDate, formattedEndDate);
     } catch (err: any) {
       console.error('Error fetching channel thumbnails:', err);
       // Show a more user-friendly error message

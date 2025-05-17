@@ -80,8 +80,6 @@ export default function QuotesPage() {
     setIsDownloading(true);
     
     try {
-      const clone = quoteRef.current.cloneNode(true) as HTMLElement;
-      
       // Create a full-screen version for download
       const container = document.createElement('div');
       container.style.width = '1200px';
@@ -96,10 +94,10 @@ export default function QuotesPage() {
       const content = document.createElement('p');
       content.style.fontFamily = '"Times New Roman MT Condensed", "Times New Roman", serif';
       content.style.color = 'white';
-      content.style.fontSize = '64px';
+      content.style.fontSize = '34px';
       content.style.textAlign = 'center';
       content.style.padding = '15%';
-      content.style.letterSpacing = '-0.01em';
+      content.style.letterSpacing = '-0.4em';
       content.style.lineHeight = '1.15';
       content.textContent = quotes[currentQuoteIndex];
       
@@ -128,17 +126,50 @@ export default function QuotesPage() {
     }
   };
   
+  // Handle touch events for mobile
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const touchX = e.touches[0].clientX;
+    const windowWidth = window.innerWidth;
+    
+    // Store the initial touch position
+    const touchStartX = touchX;
+    
+    const handleTouchEnd = (e: TouchEvent) => {
+      const touchEndX = e.changedTouches[0].clientX;
+      const diffX = touchEndX - touchStartX;
+      
+      // Swipe left (next quote)
+      if (diffX < -50) {
+        nextQuote();
+      }
+      // Swipe right (previous quote)
+      else if (diffX > 50) {
+        prevQuote();
+      }
+      // Tap (next quote)
+      else if (Math.abs(diffX) < 10) {
+        nextQuote();
+      }
+      
+      document.removeEventListener('touchend', handleTouchEnd);
+    };
+    
+    document.addEventListener('touchend', handleTouchEnd, { once: true });
+  };
+  
   return (
     <>
       <Helmet>
         <title>Quotes | Aiman Salim</title>
         <meta name="description" content="Inspirational quotes" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
       </Helmet>
       
       <div 
         className="min-h-screen flex flex-col items-center justify-center bg-black text-white cursor-pointer relative overflow-hidden"
         onClick={nextQuote}
         onMouseMove={handleMouseMove}
+        onTouchStart={handleTouchStart}
       >
         {/* Subtle radial gradient background that follows mouse */}
         <div 
@@ -149,15 +180,22 @@ export default function QuotesPage() {
           }}
         />
         
-        <div className="max-w-4xl w-full px-4 sm:px-6 z-10">
+        <div className="max-w-4xl w-full px-4 sm:px-6 md:px-8 lg:px-12 z-10">
           <div className="text-center">
             <div className={`transition-opacity duration-500 ease-in-out ${isTransitioning ? 'opacity-0' : 'opacity-100'}`}>
               <div
                 ref={quoteRef}
-                className="w-full max-w-3xl mx-auto relative"
+                className="w-full max-w-4xl mx-auto relative py-8 md:py-12"
               >
-                <p className="font-condensed text-white tracking-[-0.01em] leading-[1.15] text-center text-base sm:text-lg md:text-xl lg:text-2xl px-4 py-6"
-                   style={{ letterSpacing: '-0.01em', lineHeight: '1.15' }}>
+                <p className="font-condensed text-white leading-[1.15] text-center px-4"
+                   style={{ 
+                     letterSpacing: '-0.04em', 
+                     lineHeight: '1.15',
+                     fontSize: 'clamp(28px, 4.5vw, 54px)',
+                     maxWidth: '100%',
+                     overflowWrap: 'break-word',
+                     wordBreak: 'keep-all'
+                   }}>
                   {quotes[currentQuoteIndex]}
                 </p>
                 

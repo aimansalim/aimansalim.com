@@ -1,11 +1,14 @@
-name = "aimansalim-portfolio"
-compatibility_date = "2023-10-30"
+# Cloudflare Pages Configuration
+name = "aiman-portfolio"
+compatibility_date = "2023-10-11"
+compatibility_flags = []
 
+# Build configuration
 [build]
 command = "npm run build"
 output_dir = "dist"
 
-# Define the routes for our API endpoints
+# Routes configuration
 [[routes]]
 pattern = "/api/channel-thumbnails"
 function = "api/channel-thumbnails"
@@ -22,6 +25,7 @@ script = "server.js"
 pattern = "/api/*"
 script = "server.js"
 
+# Static assets
 [[routes]]
 pattern = "/*"
 static = "dist"

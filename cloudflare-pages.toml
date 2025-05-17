@@ -1,11 +1,24 @@
 # Configuration for Cloudflare Pages
 
+# Cloudflare Pages configuration for production
+
+# Set the compatibility date
+compatibility_date = "2023-12-01"
+
+# Build settings
 [build]
-  command = "npm run build:force"
-  publish = "dist"
-  
-[build.environment]
-  NODE_VERSION = "18"
+command = "npm run build"
+output_dir = "dist"
+
+# Routes for API endpoints
+[[routes]]
+pattern = "/api/channel-thumbnails"
+function = "api/channel-thumbnails"
+
+# Static assets (should come last)
+[[routes]]
+pattern = "/*"
+static = "dist"
 
 # Redirects and rewrites - comment this out since we're using Functions for API
 # [[redirects]]
