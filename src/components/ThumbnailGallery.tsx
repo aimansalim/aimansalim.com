@@ -452,6 +452,8 @@ export const ThumbnailGallery = () => {
         } else {
           return 'All time';
         }
+      default:
+        return 'All time';
     }
   };
 
@@ -600,29 +602,33 @@ export const ThumbnailGallery = () => {
 
   return (
     <div className="min-h-[70vh] max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 relative pb-24 flex flex-col justify-center">
-      {/* Better loading indicator */}
+      {/* Simple loading indicator */}
       {isLoading && (
-        <div className="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center">
-          <div className="bg-zinc-900 p-6 rounded-lg shadow-xl max-w-md w-full">
-            <div className="flex items-center gap-4 mb-3">
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
-                className="w-6 h-6"
-              >
-                <RefreshCcw className="text-blue-500" />
-              </motion.div>
-              <div className="text-lg font-medium text-white">{loadingProgress.message}</div>
-            </div>
-            
-            <div className="w-full bg-zinc-800 h-2 rounded-full overflow-hidden">
-              <motion.div 
-                className="h-full bg-blue-500"
-                initial={{ width: '0%' }}
-                animate={{ width: `${loadingProgress.percent}%` }}
-                transition={{ duration: 0.5 }}
-              />
-            </div>
+        <div className="w-full mb-4">
+          <div className="flex items-center gap-2 mb-2">
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 1.5, repeat: Infinity, ease: "linear" }}
+              className="w-4 h-4"
+            >
+              <RefreshCcw className="text-blue-500" />
+            </motion.div>
+            <motion.div 
+              className="text-sm text-white/90"
+              animate={{ opacity: [0.7, 1, 0.7] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+            >
+              {loadingProgress.message}
+            </motion.div>
+          </div>
+          
+          <div className="w-full bg-zinc-800 h-1.5 rounded-full overflow-hidden">
+            <motion.div 
+              className="h-full bg-blue-500"
+              initial={{ width: '0%' }}
+              animate={{ width: `${loadingProgress.percent}%` }}
+              transition={{ duration: 0.5 }}
+            />
           </div>
         </div>
       )}
