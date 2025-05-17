@@ -1,13 +1,26 @@
-import { useState, FormEvent, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { RefreshCcw, Download, ArrowDown, Link, Search, Calendar, ChevronDown, ChevronUp, Loader2 } from 'lucide-react';
 
+// Define the Thumbnail interface
 interface Thumbnail {
   id: string;
   title: string;
   imageUrl: string;
-  quality?: string;
+  quality: string;
   fallbackUrls?: string[];
+}
+
+// Define the loading progress interface
+interface LoadingProgress {
+  stage: 'initializing' | 'fetching' | 'processing' | 'completing' | 'complete';
+  message: string;
+  percent: number;
+}
+
+// Component props
+interface ThumbnailGalleryProps {
+  initialChannelUrl?: string;
 }
 
 type InputTab = 'url' | 'channel';
@@ -28,11 +41,7 @@ export const ThumbnailGallery = () => {
   const [endDate, setEndDate] = useState('');
   const [datePreset, setDatePreset] = useState<DatePreset>('30days');
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
-  const [loadingProgress, setLoadingProgress] = useState<{
-    stage: 'initializing' | 'fetching' | 'processing' | 'completing' | 'complete';
-    message: string;
-    percent: number;
-  }>({ stage: 'initializing', message: '', percent: 0 });
+  const [loadingProgress, setLoadingProgress] = useState<LoadingProgress>({ stage: 'initializing', message: '', percent: 0 });
   
   // Function to extract video ID from YouTube URL
   const extractVideoId = (url: string) => {
@@ -152,7 +161,8 @@ export const ThumbnailGallery = () => {
               thumbnails.push({
                 id: videoId,
                 title: data.title,
-                imageUrl: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`
+                imageUrl: `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`,
+                quality: 'maxresdefault.jpg'
               });
               
               setLoadingProgress({
@@ -170,7 +180,8 @@ export const ThumbnailGallery = () => {
             thumbnails.push({
               id: videoId,
               title: `YouTube Video (${videoId})`,
-              imageUrl: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
+              imageUrl: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
+              quality: 'hqdefault.jpg'
             });
             
             setLoadingProgress({
@@ -191,7 +202,8 @@ export const ThumbnailGallery = () => {
           thumbnails.push({
             id: videoId,
             title: `YouTube Video (${videoId})`,
-            imageUrl: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`
+            imageUrl: `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`,
+            quality: 'hqdefault.jpg'
           });
           
           processedCount++;
@@ -232,16 +244,43 @@ export const ThumbnailGallery = () => {
   const fetchThumbnails = async (channelUrl: string, startDate?: string, endDate?: string) => {
     setIsLoading(true);
     setError('');
+    setLoadingProgress({ 
+      stage: 'initializing', 
+      message: 'Preparing to fetch channel data...', 
+      percent: 10 
+    });
     
     try {
+      // Ensure channelUrl has proper format
+      let formattedChannelUrl = channelUrl;
+      if (!channelUrl.includes('youtube.com') && !channelUrl.includes('youtu.be')) {
+        if (channelUrl.startsWith('@')) {
+          formattedChannelUrl = `https://www.youtube.com/${channelUrl}`;
+        } else {
+          formattedChannelUrl = `https://www.youtube.com/@${channelUrl}`;
+        }
+      }
+      
+      setLoadingProgress({ 
+        stage: 'fetching', 
+        message: 'Connecting to YouTube API...', 
+        percent: 25 
+      });
+      
       // Construct the API URL with parameters
       const apiUrl = new URL('/api/channel-thumbnails', window.location.origin);
-      apiUrl.searchParams.append('channel', channelUrl);
+      apiUrl.searchParams.append('channel', formattedChannelUrl);
       
       if (startDate) apiUrl.searchParams.append('startDate', startDate);
       if (endDate) apiUrl.searchParams.append('endDate', endDate);
       
       console.log(`Fetching thumbnails from: ${apiUrl.toString()}`);
+      
+      setLoadingProgress({ 
+        stage: 'fetching', 
+        message: 'Retrieving channel videos...', 
+        percent: 40 
+      });
       
       const response = await fetch(apiUrl.toString(), {
         method: 'GET',
@@ -251,17 +290,59 @@ export const ThumbnailGallery = () => {
       });
       
       if (!response.ok) {
-        throw new Error(`Server returned ${response.status}: ${response.statusText}`);
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `Server returned ${response.status}: ${response.statusText}`);
       }
+      
+      setLoadingProgress({ 
+        stage: 'processing', 
+        message: 'Processing video thumbnails...', 
+        percent: 70 
+      });
       
       const data = await response.json();
       console.log(`Received ${data.length} thumbnails`);
       
-      setExtractedThumbnails(data);
+      if (data.length === 0) {
+        throw new Error('No videos found for this channel. Try a different channel URL.');
+      }
+      
+      // Add fallbackUrl for each thumbnail
+      const processedThumbnails = data.map((thumbnail: Thumbnail) => ({
+        ...thumbnail,
+        fallbackUrls: [
+          thumbnail.imageUrl, // First try the original URL
+          thumbnail.imageUrl.replace('maxresdefault.jpg', 'sddefault.jpg'), // Then try sddefault
+          thumbnail.imageUrl.replace('maxresdefault.jpg', 'hqdefault.jpg'), // Then try hqdefault
+          thumbnail.imageUrl.replace('maxresdefault.jpg', 'mqdefault.jpg'), // Then try mqdefault
+          thumbnail.imageUrl.replace('maxresdefault.jpg', 'default.jpg'), // Last resort
+        ]
+      }));
+      
+      setLoadingProgress({ 
+        stage: 'completing', 
+        message: `Successfully found ${data.length} videos!`, 
+        percent: 95 
+      });
+      
+      // Small delay for a better UX
+      setTimeout(() => {
+        setExtractedThumbnails(processedThumbnails);
+        setLoadingProgress({ 
+          stage: 'complete', 
+          message: `Loaded ${processedThumbnails.length} thumbnails`, 
+          percent: 100 
+        });
+        setIsLoading(false);
+      }, 500);
     } catch (err) {
       console.error('Error fetching thumbnails:', err);
       setError(err instanceof Error ? err.message : 'Failed to fetch thumbnails');
-    } finally {
+      setLoadingProgress({ 
+        stage: 'complete', 
+        message: `Error: ${err instanceof Error ? err.message : 'Failed to fetch thumbnails'}`, 
+        percent: 100 
+      });
       setIsLoading(false);
     }
   };
@@ -318,7 +399,7 @@ export const ThumbnailGallery = () => {
   };
   
   // Handle form submission
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (activeTab === 'url') {
       processUrls();
@@ -771,33 +852,41 @@ export const ThumbnailGallery = () => {
                       const target = e.target as HTMLImageElement;
                       console.error(`Failed to load image: ${target.src}`);
                       
-                      // Try YouTube's thumbnail directly if the server image fails
-                      if (!target.src.includes('img.youtube.com')) {
-                        console.log(`Trying YouTube thumbnail directly for ${thumbnail.id}`);
-                        target.src = `https://img.youtube.com/vi/${thumbnail.id}/hqdefault.jpg`;
+                      // Find this thumbnail
+                      const thisThumbnail = extractedThumbnails.find(t => t.id === thumbnail.id);
+                      
+                      if (!thisThumbnail || !thisThumbnail.fallbackUrls || thisThumbnail.fallbackUrls.length === 0) {
+                        // Use direct thumbnail fallback sequence if no fallbackUrls
+                        const currentSrc = target.src;
+                        const videoId = thumbnail.id;
+                        
+                        if (currentSrc.includes('maxresdefault.jpg')) {
+                          target.src = `https://img.youtube.com/vi/${videoId}/sddefault.jpg`;
+                        } else if (currentSrc.includes('sddefault.jpg')) {
+                          target.src = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+                        } else if (currentSrc.includes('hqdefault.jpg')) {
+                          target.src = `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`;
+                        } else if (currentSrc.includes('mqdefault.jpg')) {
+                          target.src = `https://img.youtube.com/vi/${videoId}/default.jpg`;
+                        } else {
+                          // Show placeholder as last resort
+                          target.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cline x1='12' y1='8' x2='12' y2='12'%3E%3C/line%3E%3Cline x1='12' y1='16' x2='12.01' y2='16'%3E%3C/line%3E%3C/svg%3E`;
+                          target.style.objectFit = 'contain';
+                          target.style.padding = '20%';
+                          target.style.background = 'rgba(0,0,0,0.8)';
+                        }
                         return;
                       }
                       
-                      // If already using YouTube image, try different qualities
-                      const videoId = thumbnail.id;
-                      const qualitySequence = [
-                        'maxresdefault.jpg',
-                        'sddefault.jpg',
-                        'hqdefault.jpg',
-                        'mqdefault.jpg',
-                        'default.jpg'
-                      ];
+                      // Use the fallback URLs provided
+                      const currentSrc = target.src;
+                      const currentIndex = thisThumbnail.fallbackUrls.indexOf(currentSrc);
                       
-                      // Find current quality
-                      const currentQuality = qualitySequence.find(q => target.src.includes(q)) || '';
-                      const currentIndex = qualitySequence.indexOf(currentQuality);
-                      
-                      // Try next quality if available
-                      if (currentIndex >= 0 && currentIndex < qualitySequence.length - 1) {
-                        const nextQuality = qualitySequence[currentIndex + 1];
-                        target.src = `https://img.youtube.com/vi/${videoId}/${nextQuality}`;
+                      if (currentIndex >= 0 && currentIndex < thisThumbnail.fallbackUrls.length - 1) {
+                        // Try the next fallback URL
+                        target.src = thisThumbnail.fallbackUrls[currentIndex + 1];
                       } else {
-                        // Show placeholder as last resort
+                        // If we've tried all fallbacks or can't find current one, use the default placeholder
                         target.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cline x1='12' y1='8' x2='12' y2='12'%3E%3C/line%3E%3Cline x1='12' y1='16' x2='12.01' y2='16'%3E%3C/line%3E%3C/svg%3E`;
                         target.style.objectFit = 'contain';
                         target.style.padding = '20%';

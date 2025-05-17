@@ -1,17 +1,16 @@
 # Cloudflare Pages Configuration
 name = "aiman-portfolio"
-compatibility_date = "2023-10-11"
+compatibility_date = "2024-05-17"
 compatibility_flags = []
 
 # Build configuration
 [build]
 command = "npm run build"
-output_dir = "dist"
 
-# Routes configuration
+# Routes configuration for functions
 [[routes]]
 pattern = "/api/channel-thumbnails"
-function = "api/channel-thumbnails"
+function = "channel-thumbnails"
 
 [[routes]]
 pattern = "/api/thumbnails/download"

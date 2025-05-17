@@ -1,5 +1,3 @@
-// Cloudflare Pages Function to handle YouTube thumbnail requests
-
 export async function onRequest(context) {
   const { request, env } = context;
   
