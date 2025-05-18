@@ -1,15 +1,14 @@
 import { motion } from 'framer-motion';
 import { GridOverlay } from './GridOverlay';
-import { ReactNode } from 'react';
 
 interface PageLayoutProps {
-  children: ReactNode;
+  children: React.ReactNode;
   className?: string;
 }
 
 export const PageLayout = ({ children, className = '' }: PageLayoutProps) => {
   return (
-    <div className={`min-h-screen bg-black text-white relative font-space-grotesk ${className}`}>
+    <div className={`min-h-screen bg-white dark:bg-black text-black dark:text-white relative font-space-grotesk transition-colors duration-300 ${className}`}>
       {/* Grid Overlay */}
       <GridOverlay />
       

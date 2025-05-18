@@ -133,7 +133,7 @@ app.get('/api/channel-thumbnails', async (req, res) => {
               }
               
               console.log(`Found ${entries.length} entries in RSS feed`);
-              
+    
               // Filter by date if specified
               if (startDate && endDate) {
                 const startDateStr = startDate.replace(/-/g, '');

@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   content: [
     './index.html',
     './src/**/*.{js,ts,jsx,tsx}',
@@ -7,10 +7,11 @@ module.exports = {
     './src/pages/**/*.{js,ts,jsx,tsx}',
     './src/portfolio-mono/**/*.{js,ts,jsx,tsx}'
   ],
+  darkMode: 'class',
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Space Grotesk', 'sans-serif'],
+        'space-grotesk': ['Space Grotesk', 'sans-serif'],
         times: ['Times New Roman', 'serif'],
         mono: ['Courier New', 'monospace'],
         condensed: ['"Times New Roman MT Condensed"', 'Times New Roman', 'serif'],

@@ -31,18 +31,18 @@ export const Footer: FC = () => {
         <div className="py-8 grid grid-cols-1 md:grid-cols-3 gap-8">
           {/* Navigation Column */}
           <div className="space-y-4">
-            <h3 className="text-xs font-space-grotesk text-white/40 uppercase tracking-wider mb-4">Navigation</h3>
+              <h3 className="text-xs font-space-grotesk text-white/40 uppercase tracking-wider mb-4">Navigation</h3>
             <div className="grid grid-cols-1 gap-3">
               {linkGroups.main.map(link => (
-                <Link 
-                  key={link.path}
-                  to={link.path} 
+                  <Link 
+                    key={link.path}
+                    to={link.path} 
                   className="text-xs text-white/60 hover:text-white transition-colors flex items-center gap-2"
-                >
+                  >
                   {link.icon}
                   <span>{link.label}</span>
-                </Link>
-              ))}
+                  </Link>
+                ))}
             </div>
           </div>
 
@@ -69,10 +69,10 @@ export const Footer: FC = () => {
             
             {/* Contact Info */}
             <div className="space-y-3 mb-4">
-              <a 
+                <a 
                 href="mailto:info.boold@gmail.com" 
                 className="text-xs text-white/60 hover:text-white transition-colors flex items-center gap-2"
-              >
+                >
                 <Mail className="w-3 h-3" />
                 <span>info.boold@gmail.com</span>
               </a>
@@ -80,7 +80,7 @@ export const Footer: FC = () => {
                 <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                   <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z" />
                   <circle cx="12" cy="10" r="3" />
-                </svg>
+                  </svg>
                 <span>Milan, Italy</span>
               </p>
             </div>

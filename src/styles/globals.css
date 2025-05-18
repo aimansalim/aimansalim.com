@@ -13,35 +13,31 @@
 @layer base {
   /* Global selection styles */
   ::selection {
-    background-color: white;
-    color: black;
+    @apply bg-black dark:bg-white text-white dark:text-black;
   }
 
   ::-moz-selection {
-    background-color: white;
-    color: black;
+    @apply bg-black dark:bg-white text-white dark:text-black;
   }
 
   /* Image selection */
   img::selection {
-    background-color: rgba(255, 255, 255, 0.2);
+    @apply bg-black/20 dark:bg-white/20;
     filter: invert(1) grayscale(1);
   }
 
   img::-moz-selection {
-    background-color: rgba(255, 255, 255, 0.2);
+    @apply bg-black/20 dark:bg-white/20;
     filter: invert(1) grayscale(1);
   }
 
   /* Code block selection */
   pre::selection, code::selection {
-    background-color: white;
-    color: black;
+    @apply bg-black dark:bg-white text-white dark:text-black;
   }
 
   pre::-moz-selection, code::-moz-selection {
-    background-color: white;
-    color: black;
+    @apply bg-black dark:bg-white text-white dark:text-black;
   }
 }
 
@@ -52,21 +48,23 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: black;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  @apply bg-white dark:bg-black border border-black/10 dark:border-white/10;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  @apply bg-black/10 dark:bg-white/10 border border-black/20 dark:border-white/20;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+  @apply bg-black/20 dark:bg-white/20;
 }
 
 /* For Firefox */
 * {
   scrollbar-width: thin;
-  scrollbar-color: rgba(255, 255, 255, 0.1) black;
+  scrollbar-color: theme('colors.black.DEFAULT / 0.1') theme('colors.white.DEFAULT');
+}
+
+.dark * {
+  scrollbar-color: theme('colors.white.DEFAULT / 0.1') theme('colors.black.DEFAULT');
 }

@@ -154,10 +154,10 @@ export const ThumbnailGallery = () => {
           
           // Try to fetch video info from YouTube's oEmbed API
           try {
-            const response = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`);
-            
-            if (response.ok) {
-              const data = await response.json();
+          const response = await fetch(`https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`);
+          
+          if (response.ok) {
+            const data = await response.json();
               thumbnails.push({
                 id: videoId,
                 title: data.title,
@@ -223,7 +223,7 @@ export const ThumbnailGallery = () => {
       
       // Small delay to show completion
       setTimeout(() => {
-        setExtractedThumbnails(thumbnails);
+      setExtractedThumbnails(thumbnails);
         setLoadingProgress({ 
           stage: 'complete', 
           message: `Found ${thumbnails.length} thumbnails`, 
@@ -708,13 +708,13 @@ export const ThumbnailGallery = () => {
                 </label>
                 <div className="flex flex-col gap-3">
                   <div className="relative flex-1">
-                    <input
-                      type="text"
-                      value={channelUrl}
-                      onChange={(e) => setChannelUrl(e.target.value)}
+                  <input
+                    type="text"
+                    value={channelUrl}
+                    onChange={(e) => setChannelUrl(e.target.value)}
                       placeholder="https://www.youtube.com/@aledellagiusta"
                       className="w-full bg-black border border-white/10 rounded-sm px-3 py-3 text-white focus:outline-none focus:ring-1 focus:ring-white/30 min-h-[50px] h-[50px] pr-[90px]"
-                    />
+                  />
                     <button
                       type="button"
                       onClick={() => setChannelUrl("https://www.youtube.com/@aledellagiusta")}
@@ -890,25 +890,25 @@ export const ThumbnailGallery = () => {
           {/* Render thumbnails with animation */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 overflow-y-auto flex-1">
             <AnimatePresence>
-              {extractedThumbnails.map((thumbnail, index) => (
-                <motion.div
+            {extractedThumbnails.map((thumbnail, index) => (
+              <motion.div 
                   key={thumbnail.id}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, scale: 0.9 }}
                   transition={{ duration: 0.2, delay: index * 0.02 }}
                   className="relative aspect-video bg-zinc-900 rounded-lg overflow-hidden group shadow-md hover:shadow-xl transition-all duration-300"
-                >
-                  {/* Standardized 16:9 aspect ratio container */}
-                  <div className="w-full h-0 pb-[56.25%] relative">
-                    <img 
-                      src={thumbnail.imageUrl} 
-                      alt={thumbnail.title}
-                      className="absolute top-0 left-0 w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        console.error(`Failed to load image: ${target.src}`);
-                        
+              >
+                {/* Standardized 16:9 aspect ratio container */}
+                <div className="w-full h-0 pb-[56.25%] relative">
+                  <img 
+                    src={thumbnail.imageUrl} 
+                    alt={thumbnail.title}
+                    className="absolute top-0 left-0 w-full h-full object-cover object-center transition-transform duration-500 group-hover:scale-105"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      console.error(`Failed to load image: ${target.src}`);
+                      
                         // Find this thumbnail
                         const thisThumbnail = extractedThumbnails.find(t => t.id === thumbnail.id);
                         
@@ -944,56 +944,56 @@ export const ThumbnailGallery = () => {
                           target.src = thisThumbnail.fallbackUrls[currentIndex + 1];
                         } else {
                           // If we've tried all fallbacks or can't find current one, use the default placeholder
-                          target.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cline x1='12' y1='8' x2='12' y2='12'%3E%3C/line%3E%3Cline x1='12' y1='16' x2='12.01' y2='16'%3E%3C/line%3E%3C/svg%3E`;
-                          target.style.objectFit = 'contain';
-                          target.style.padding = '20%';
-                          target.style.background = 'rgba(0,0,0,0.8)';
+                      target.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='1' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'%3E%3C/circle%3E%3Cline x1='12' y1='8' x2='12' y2='12'%3E%3C/line%3E%3Cline x1='12' y1='16' x2='12.01' y2='16'%3E%3C/line%3E%3C/svg%3E`;
+                      target.style.objectFit = 'contain';
+                      target.style.padding = '20%';
+                      target.style.background = 'rgba(0,0,0,0.8)';
                         }
-                      }}
-                    />
+                    }}
+                  />
+                </div>
+                
+                {/* Always visible title and metadata for single thumbnails */}
+                {extractedThumbnails.length === 1 && (
+                  <div className="p-4 bg-black">
+                    <h3 className="text-lg md:text-xl text-white font-medium mb-2" title={thumbnail.title}>
+                      {thumbnail.title}
+                    </h3>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-white/70">{thumbnail.id}</span>
+                      <button 
+                        onClick={() => downloadImage(thumbnail.imageUrl, `youtube-thumbnail-${thumbnail.id}.jpg`)}
+                        className="text-sm px-3 py-1.5 text-white flex items-center gap-2 bg-white/20 hover:bg-white/30 rounded-sm transition-colors"
+                      >
+                        <Download className="w-4 h-4" />
+                        Download Thumbnail
+                      </button>
+                    </div>
                   </div>
-                  
-                  {/* Always visible title and metadata for single thumbnails */}
-                  {extractedThumbnails.length === 1 && (
-                    <div className="p-4 bg-black">
-                      <h3 className="text-lg md:text-xl text-white font-medium mb-2" title={thumbnail.title}>
+                )}
+                
+                {/* Hover overlay only for multiple thumbnails */}
+                {extractedThumbnails.length > 1 && (
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="absolute bottom-0 left-0 right-0 p-3 flex flex-col gap-2">
+                      <span className="text-sm text-white/90 font-medium line-clamp-2" title={thumbnail.title}>
                         {thumbnail.title}
-                      </h3>
+                      </span>
                       <div className="flex justify-between items-center">
-                        <span className="text-sm text-white/70">{thumbnail.id}</span>
+                        <span className="text-xs text-white/50 truncate max-w-[120px]">{thumbnail.id}</span>
                         <button 
                           onClick={() => downloadImage(thumbnail.imageUrl, `youtube-thumbnail-${thumbnail.id}.jpg`)}
-                          className="text-sm px-3 py-1.5 text-white flex items-center gap-2 bg-white/20 hover:bg-white/30 rounded-sm transition-colors"
+                          className="text-xs px-2 py-1 text-white/90 hover:text-white flex items-center gap-1 bg-white/10 hover:bg-white/20 rounded-sm transition-colors"
                         >
-                          <Download className="w-4 h-4" />
-                          Download Thumbnail
+                          <Download className="w-3 h-3" />
+                          Download
                         </button>
                       </div>
                     </div>
-                  )}
-                  
-                  {/* Hover overlay only for multiple thumbnails */}
-                  {extractedThumbnails.length > 1 && (
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <div className="absolute bottom-0 left-0 right-0 p-3 flex flex-col gap-2">
-                        <span className="text-sm text-white/90 font-medium line-clamp-2" title={thumbnail.title}>
-                          {thumbnail.title}
-                        </span>
-                        <div className="flex justify-between items-center">
-                          <span className="text-xs text-white/50 truncate max-w-[120px]">{thumbnail.id}</span>
-                          <button 
-                            onClick={() => downloadImage(thumbnail.imageUrl, `youtube-thumbnail-${thumbnail.id}.jpg`)}
-                            className="text-xs px-2 py-1 text-white/90 hover:text-white flex items-center gap-1 bg-white/10 hover:bg-white/20 rounded-sm transition-colors"
-                          >
-                            <Download className="w-3 h-3" />
-                            Download
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </motion.div>
-              ))}
+                  </div>
+                )}
+              </motion.div>
+            ))}
             </AnimatePresence>
           </div>
         </div>

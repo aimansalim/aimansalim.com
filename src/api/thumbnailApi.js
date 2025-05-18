@@ -307,7 +307,7 @@ async function downloadThumbnails(channelUrl, startDate, endDate) {
         return;
       }
       
-      console.log(`[API] Successfully found ${thumbnails.length} thumbnails`);
+        console.log(`[API] Successfully found ${thumbnails.length} thumbnails`);
       resolve(thumbnails);
     });
     
@@ -550,4 +550,4 @@ function getKnownVideoTitle(videoId) {
 module.exports = {
   downloadThumbnails,
   createCollage
-};
+}; 
