@@ -7,7 +7,6 @@ module.exports = {
     './src/pages/**/*.{js,ts,jsx,tsx}',
     './src/portfolio-mono/**/*.{js,ts,jsx,tsx}'
   ],
-  darkMode: 'class',
   theme: {
     extend: {
       fontFamily: {
@@ -22,16 +21,6 @@ module.exports = {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(circle at center, var(--tw-gradient-stops))',
       },
-      colors: {
-        background: {
-          light: '#ffffff',
-          dark: '#000000',
-        },
-        text: {
-          light: '#000000',
-          dark: '#ffffff',
-        }
-      }
     },
   },
   plugins: [],
