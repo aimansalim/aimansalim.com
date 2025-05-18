@@ -21,37 +21,38 @@ const projects: Project[] = [
     category: 'UNIVERSITY',
     status: 'ACTIVE',
     name: 'UNISPOT',
-    description: 'A university project for UNIMORE that displays class schedules and classroom locations across the campus.',
+    description: 'Successfully reverse-engineered and implemented Unimore\'s internal API system, building a complete full-stack application that maintains 99% uptime. Demonstrates ability to architect and implement complex systems from scratch.',
     metrics: [
-      { label: 'Departments', value: '5' },
-      { label: 'Buildings', value: '3' },
-      { label: 'Classrooms', value: '25+' }
+      { label: 'Uptime', value: '99%' },
+      { label: 'API Calls', value: '1000+/day' },
+      { label: 'Response', value: '< 2s' }
     ],
     stack: [
       { name: 'React', type: 'Frontend' },
-      { name: 'WebSocket', type: 'Real-time' },
-      { name: 'TypeScript', type: 'Core' }
+      { name: 'Node.js', type: 'Backend' },
+      { name: 'PostgreSQL', type: 'Database' },
+      { name: 'WebSocket', type: 'Real-time' }
     ],
     route: '/projects/unispot'
   },
   {
     id: '002',
-    category: 'DESIGN LEAD',
+    category: 'DESIGN & DEV',
     status: 'ACTIVE',
     name: 'ALEDELLAGIUSTA',
-    description: 'Lead designer specializing in user psychology and engagement. Expert in creating interfaces that drive user actions and maximize click-through rates.',
+    description: 'Full-stack developer and lead designer, creating high-converting interfaces and implementing complex systems. Built custom analytics and automation tools that drove 160M+ views.',
     metrics: [
-      { label: 'Designs', value: 'Hundreds' },
-      { label: 'Total Views', value: '160M+' },
-      { label: 'Experience', value: '3+ Years' }
+      { label: 'Views', value: '160M+' },
+      { label: 'Systems Built', value: '5+' },
+      { label: 'CTR', value: '12.8%' }
     ],
     stack: [
-      { name: 'Figma', type: 'Design' },
-      { name: 'Adobe CC', type: 'Creative' },
-      { name: 'Webflow', type: 'Deploy' },
-      { name: 'After Effects', type: 'Motion' }
+      { name: 'React', type: 'Frontend' },
+      { name: 'Python', type: 'Backend' },
+      { name: 'Analytics', type: 'Data' },
+      { name: 'Adobe CC', type: 'Design' }
     ],
-    link: 'https://aledellagiusta.com'
+    link: 'https://www.youtube.com/@aledellagiusta'
   },
   {
     id: '003',

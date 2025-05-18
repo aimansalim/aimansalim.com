@@ -69,19 +69,19 @@ const projects: ProjectDetails[] = [
   },
   {
     title: "UNISPOT",
-    type: "Student Platform",
+    type: "Full-Stack Platform",
     details: [
-      "Study Room Finder Platform",
-      "Real-time Availability",
-      "Student Community Features",
-      "Interactive Campus Map"
+      "Reverse-engineered University API",
+      "Built Complete System from Scratch",
+      "99% Uptime Achievement",
+      "End-to-End Implementation"
     ],
-    tech: ["Next.js", "React", "TailwindCSS", "PostgreSQL", "WebSockets"],
-    link: "https://uni-spot.vercel.app",
+    tech: ["React", "Node.js", "PostgreSQL", "WebSocket", "REST API"],
+    link: "https://uni-posti.vercel.app",
     metrics: [
-      { key: "Users", value: "100+" },
-      { key: "Rooms", value: "50+" },
-      { key: "Status", value: "BETA" }
+      { key: "Uptime", value: "99%" },
+      { key: "Daily Users", value: "100+" },
+      { key: "API Calls", value: "1000+" }
     ],
     status: 'development'
   },
@@ -276,18 +276,18 @@ const AboutPage: React.FC = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <TechBox
               icon={<Code className="w-4 h-4 stroke-[1px]" />}
-              title="Development"
-              items={["Next.js", "React", "TailwindCSS", "PostgreSQL", "Python"]}
+              title="Full-Stack Development"
+              items={["React/Next.js", "Node.js/Python", "PostgreSQL/MongoDB", "REST/WebSocket APIs", "System Architecture"]}
             />
             <TechBox
               icon={<Palette className="w-4 h-4 stroke-[1px]" />}
-              title="Design"
-              items={["Adobe Suite", "Figma", "After Effects", "Photography"]}
+              title="Technical Design"
+              items={["UI/UX Implementation", "Custom Components", "Design Systems", "Interactive Prototypes"]}
             />
             <TechBox
               icon={<Briefcase className="w-4 h-4 stroke-[1px]" />}
-              title="Business"
-              items={["Brand Strategy", "Content Strategy", "Team Leadership", "Project Management"]}
+              title="Engineering"
+              items={["API Integration", "System Architecture", "Performance Optimization", "Technical Leadership"]}
             />
           </div>
         </Section>

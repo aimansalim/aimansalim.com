@@ -61,10 +61,11 @@ const ProjectSection = () => (
 
     {/* Title & Description */}
     <div className="space-y-8 mb-12">
-      <h2 className="text-4xl font-light tracking-tight">Financial Course Platform</h2>
+      <h2 className="text-4xl font-light tracking-tight">Full-Stack Platform Development</h2>
       <p className="text-base text-white/60 max-w-2xl leading-relaxed">
-        Led the development of aledellagiusta's financial course platform, creating a high-conversion 
-        landing page that seamlessly integrates with Scalable's infrastructure.
+        Architected and implemented complete web platforms from ground up, combining strong technical implementation 
+        with engaging user interfaces. Built custom analytics systems, automated workflows, and high-performance 
+        frontends that drive user engagement.
       </p>
     </div>
 
@@ -72,38 +73,32 @@ const ProjectSection = () => (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
       {/* Link Section */}
       <div className="space-y-4">
-        <div className="text-sm text-white/40 uppercase tracking-wider">Project URL</div>
-        <a 
-          href="https://aledellagiusta.it" 
-          target="_blank" 
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 text-white hover:text-white/80 transition-colors"
-        >
-          <span>aledellagiusta.it</span>
-          <svg 
-            className="w-4 h-4 text-emerald-500" 
-            fill="none" 
-            viewBox="0 0 24 24" 
-            stroke="currentColor"
-          >
-            <path 
-              strokeLinecap="round" 
-              strokeLinejoin="round" 
-              strokeWidth={2} 
-              d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" 
-            />
-          </svg>
-        </a>
+        <div className="text-sm text-white/40 uppercase tracking-wider">Technical Implementation</div>
+        <div className="flex flex-wrap gap-2">
+          {[
+            'Full-Stack Development',
+            'Custom Analytics',
+            'API Integration',
+            'Performance Optimization'
+          ].map((tech, index) => (
+            <div 
+              key={index}
+              className="text-xs px-2 py-1 border border-white/10 text-white/60"
+            >
+              {tech}
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Metrics Grid */}
       <div className="col-span-2 grid grid-cols-2 gap-8">
         <div className="space-y-4">
-          <div className="text-sm text-white/40 uppercase tracking-wider">First Month Sales</div>
-          <div className="text-3xl font-light">40K€+</div>
+          <div className="text-sm text-white/40 uppercase tracking-wider">System Reliability</div>
+          <div className="text-3xl font-light">99%+</div>
         </div>
         <div className="space-y-4">
-          <div className="text-sm text-white/40 uppercase tracking-wider">Platform Uptime</div>
+          <div className="text-sm text-white/40 uppercase tracking-wider">Technical Coverage</div>
           <div className="text-3xl font-light">100%</div>
         </div>
       </div>

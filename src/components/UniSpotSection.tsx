@@ -31,8 +31,9 @@ export const UniSpotSection = () => {
             </h2>
             
             <p className="text-zinc-400 max-w-2xl mx-auto font-space-grotesk text-base mt-6">
-              Real-time campus navigation system for Unimore University, featuring live occupancy tracking 
-              and space optimization across Modena's academic facilities.
+              Successfully reverse-engineered and implemented Unimore's internal API system, creating a reliable 
+              classroom tracking platform. Built entirely from scratch, featuring custom API integration, real-time 
+              updates, and an intuitive interface that maintains 99% uptime without requiring official access.
             </p>
           </div>
 
@@ -98,19 +99,19 @@ export const UniSpotSection = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8">
             {[
               {
-                title: "TACTICAL MONITORING",
-                description: "Secure campus surveillance and occupancy tracking",
-                specs: ["< 5ms Response", "99.9% Combat Ready", "24/7 Active Duty"]
+                title: "API INTEGRATION",
+                description: "Custom reverse-engineered system",
+                specs: ["99% Uptime", "Legal Access", "Custom Built"]
               },
               {
-                title: "FIELD OPERATIONS",
-                description: "Strategic deployment of resources across campus zones",
-                specs: ["Live Intel Feed", "25 Sectors Mapped", "100+ Hot Zones"]
+                title: "FULL STACK DEV",
+                description: "End-to-end implementation",
+                specs: ["Frontend", "Backend", "Database"]
               },
               {
-                title: "COMMAND CENTER",
-                description: "Mission control infrastructure and deployment systems",
-                specs: ["Next.js Core", "Secure Database", "Live Comms Link"]
+                title: "SYSTEM CORE",
+                description: "Robust architecture & monitoring",
+                specs: ["API Layer", "Real-time", "Automated"]
               }
             ].map((feature, index) => (
               <div 
