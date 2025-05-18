@@ -5,10 +5,74 @@
 @tailwind utilities;
 
 @layer base {
-  body {
-    @apply bg-black text-white;
-    font-family: 'Space Grotesk', sans-serif;
+  :root {
+    --text-color: rgba(255, 255, 255, 0.8);
+    --background-color: #000000;
   }
+
+  :root.light {
+    --text-color: rgba(0, 0, 0, 0.8);
+    --background-color: #ffffff;
+  }
+
+  body {
+    @apply bg-background-dark dark:bg-background-light text-text-dark dark:text-text-light;
+    font-family: 'Space Grotesk', sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+
+  /* Global selection styles */
+  ::selection {
+    @apply bg-text-dark text-background-dark dark:bg-text-light dark:text-background-light;
+  }
+
+  ::-moz-selection {
+    @apply bg-text-dark text-background-dark dark:bg-text-light dark:text-background-light;
+  }
+
+  /* Image selection */
+  img::selection {
+    background-color: rgba(255, 255, 255, 0.2);
+    filter: invert(1) grayscale(1);
+  }
+
+  img::-moz-selection {
+    background-color: rgba(255, 255, 255, 0.2);
+    filter: invert(1) grayscale(1);
+  }
+
+  /* Code block selection */
+  pre::selection, code::selection {
+    @apply bg-text-dark text-background-dark dark:bg-text-light dark:text-background-light;
+  }
+
+  pre::-moz-selection, code::-moz-selection {
+    @apply bg-text-dark text-background-dark dark:bg-text-light dark:text-background-light;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-background-dark dark:bg-background-light border border-text-dark/10 dark:border-text-light/10;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-text-dark/10 dark:bg-text-light/10 border border-text-dark/20 dark:border-text-light/20;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-text-dark/20 dark:bg-text-light/20;
+}
+
+/* For Firefox */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--text-color) var(--background-color);
 }
 
 @keyframes pulse {
@@ -30,12 +94,11 @@
 }
 
 .hairline {
-  height: 1px;
-  background-color: rgba(255, 255, 255, 0.1);
+  @apply h-px bg-text-dark/10 dark:bg-text-light/10;
 }
 
 .box-hairline {
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  @apply border border-text-dark/10 dark:border-text-light/10;
 }
 
 .hover-trigger .hover-target {
@@ -52,8 +115,9 @@
 .grid-pattern {
   background-size: 40px 40px;
   background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+    linear-gradient(to right, var(--text-color) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--text-color) 1px, transparent 1px);
+  opacity: 0.025;
 }
 
 .swiss-hover {
@@ -61,7 +125,7 @@
 }
 
 .swiss-hover:hover {
-  background-color: rgba(255, 255, 255, 0.05);
+  @apply bg-text-dark/5 dark:bg-text-light/5;
   transform: translateY(-1px);
 }
 
@@ -76,7 +140,7 @@
   left: 0;
   width: 0;
   height: 1px;
-  background-color: white;
+  @apply bg-text-dark dark:bg-text-light;
   transition: width 0.3s ease;
 }
 

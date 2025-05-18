@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Command, ChevronRight, ExternalLink } from 'lucide-react';
@@ -34,10 +34,14 @@ function App() {
     <ThemeProvider>
       <Router>
         <ScrollToTop />
-        <div className="min-h-screen bg-black dark:bg-black bg-white text-black dark:text-white relative flex flex-col transition-colors duration-300">
+        <div className="min-h-screen bg-background-dark dark:bg-background-light text-text-dark dark:text-text-light relative flex flex-col transition-colors duration-300">
           <BackgroundGrid />
           <Navigation onMenuOpen={handleMenuOpen} />
-          <ThemeToggle />
+          
+          {/* Theme Toggle */}
+          <div className="fixed top-24 right-4 z-50">
+            <ThemeToggle />
+          </div>
           
           <div className="flex-grow">
             <Routes>
@@ -45,7 +49,7 @@ function App() {
                 <main className="pt-16">
                   {/* Hero Section */}
                   <section className="min-h-[90vh] flex items-center justify-center relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-radial from-white/5 via-transparent to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-radial from-white/5 via-transparent to-transparent dark:from-black/5" />
                     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
                       <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -53,18 +57,18 @@ function App() {
                         transition={{ duration: 0.8 }}
                         className="text-center relative"
                       >
-                        <div className="inline-flex items-center space-x-2 mt-24 sm:mt-12 mb-12 px-3 py-1.5 bg-black border border-white/10 rounded-[2px] backdrop-blur-sm relative">
+                        <div className="inline-flex items-center space-x-2 mt-24 sm:mt-12 mb-12 px-3 py-1.5 bg-black dark:bg-white border border-white/10 dark:border-black/10 rounded-[2px] backdrop-blur-sm relative">
                           <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent opacity-20" />
                           <StatusIndicator />
-                          <span className="text-[10px] tracking-[0.2em] text-white/50 uppercase relative">Working Status: Active</span>
+                          <span className="text-[10px] tracking-[0.2em] text-white/50 dark:text-black/50 uppercase relative">Working Status: Active</span>
                         </div>
                         
                         <h1 className="font-space-grotesk font-medium tracking-tight leading-none mb-12">
-                          <span className="text-[40px] sm:text-[56px] text-zinc-500 block">AIMAN SALIM</span>
-                          <span className="text-[40px] sm:text-[56px] text-white block mt-1">THE CREATOR'S ENGINEER</span>
+                          <span className="text-[40px] sm:text-[56px] text-zinc-500 dark:text-zinc-600 block">AIMAN SALIM</span>
+                          <span className="text-[40px] sm:text-[56px] text-white dark:text-black block mt-1">THE CREATOR'S ENGINEER</span>
                         </h1>
                         
-                        <p className="text-xl text-gray-400 max-w-2xl mx-auto mb-12 leading-relaxed">
+                        <p className="text-xl text-gray-400 dark:text-gray-600 max-w-2xl mx-auto mb-12 leading-relaxed">
                           Building tools I wish I had & designing stuff I want to see.
                         </p>
 
@@ -73,17 +77,17 @@ function App() {
                             href="#unispot-section"
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
-                            className="w-[240px] flex items-center justify-center px-8 py-4 bg-black border border-white/10 rounded-[2px] hover:bg-white/5 transition-colors group relative overflow-hidden"
+                            className="w-[240px] flex items-center justify-center px-8 py-4 bg-black dark:bg-white border border-white/10 dark:border-black/10 rounded-[2px] hover:bg-white/5 dark:hover:bg-black/5 transition-colors group relative overflow-hidden"
                           >
                             <div className="absolute inset-0 bg-gradient-to-r from-white/5 to-transparent opacity-20" />
-                            <span className="text-[10px] tracking-[0.2em] text-white/90 uppercase relative">View Projects</span>
+                            <span className="text-[10px] tracking-[0.2em] text-white/90 dark:text-black/90 uppercase relative">View Projects</span>
                             <Command className="h-3 w-3 ml-2 transition-transform group-hover:rotate-12 relative" />
                           </motion.a>
                           <motion.a
                             href="#contact"
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
-                            className="w-[240px] flex items-center justify-center px-8 py-4 bg-white text-black rounded-[2px] hover:bg-zinc-100 transition-colors relative overflow-hidden"
+                            className="w-[240px] flex items-center justify-center px-8 py-4 bg-white dark:bg-black text-black dark:text-white rounded-[2px] hover:bg-zinc-100 dark:hover:bg-zinc-900 transition-colors relative overflow-hidden"
                           >
                             <span className="text-[10px] tracking-[0.2em] uppercase">Initiate Contact</span>
                             <ExternalLink className="h-3 w-3 ml-2" />

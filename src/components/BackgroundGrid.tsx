@@ -29,9 +29,23 @@ export const BackgroundGrid = () => {
   }, []);
 
   return (
-    <div className="fixed inset-0 overflow-hidden pointer-events-none z-0">
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:40px_40px]" />
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:160px_160px]" />
+    <div className="fixed inset-0 pointer-events-none">
+      {/* Grid Pattern */}
+      <div 
+        className="absolute inset-0 opacity-5"
+        style={{
+          backgroundImage: `
+            linear-gradient(to right, var(--grid-color) 1px, transparent 1px),
+            linear-gradient(to bottom, var(--grid-color) 1px, transparent 1px)
+          `,
+          backgroundSize: '40px 40px',
+          '--grid-color': 'var(--text-color)'
+        } as React.CSSProperties}
+      />
+
+      {/* Radial Gradient */}
+      <div className="absolute inset-0 bg-gradient-radial from-white/5 dark:from-black/5 via-transparent to-transparent" />
+
       {dots.map((dot, i) => (
         <div
           key={i}
