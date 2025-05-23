@@ -16,11 +16,23 @@
   --transition-slow: 0.6s;
 }
 
+/* Ensure everything is black to prevent white backgrounds */
+html {
+  background: #000000 !important;
+  background-color: #000000 !important;
+  background-attachment: fixed;
+  background-image: linear-gradient(to bottom, #000000, #000000);
+  overflow-x: hidden;
+}
+
 @layer base {
   body {
     @apply bg-black text-white;
+    background: #000000 !important;
+    background-color: #000000 !important;
     font-family: 'Space Grotesk', sans-serif;
     font-feature-settings: 'kern' 1, 'liga' 1;
+    overflow-x: hidden;
   }
   
   /* Respect user motion preferences */
