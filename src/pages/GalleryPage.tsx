@@ -1,6 +1,6 @@
 import React, { useState, useRef, useMemo, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
-import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { X, Mail, ExternalLink, Download } from 'lucide-react';
 import { youtubeGalleryItems } from '../data/youtubeVideos';
 import { quotes } from '../data/quotes';
@@ -245,46 +245,9 @@ const shuffleArray = (array: GalleryItem[]) => {
 export default function GalleryPage() {
   const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
   const [imagesLoaded, setImagesLoaded] = useState<Set<string>>(new Set());
-  const [isVisible, setIsVisible] = useState<{ [key: string]: boolean }>({});
   const quoteModalContentRef = useRef<HTMLParagraphElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  
-  // Scroll-driven animations
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"]
-  });
-  
-  const y1 = useTransform(scrollYProgress, [0, 1], [0, -50]);
-  const y2 = useTransform(scrollYProgress, [0, 1], [0, -100]);
-  const y3 = useTransform(scrollYProgress, [0, 1], [0, -150]);
 
   const galleryItems = useMemo(() => shuffleArray(allGalleryItems), []);
-
-  // Intersection Observer for staggered animations
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsVisible(prev => ({
-              ...prev,
-              [entry.target.id]: true
-            }));
-          }
-        });
-      },
-      { 
-        threshold: 0.1,
-        rootMargin: '50px 0px -50px 0px'
-      }
-    );
-
-    const elements = document.querySelectorAll('.gallery-item-container');
-    elements.forEach((el) => observer.observe(el));
-
-    return () => observer.disconnect();
-  }, [galleryItems]);
 
   // Preload all images immediately
   useEffect(() => {
@@ -519,75 +482,15 @@ export default function GalleryPage() {
       `}</style>
 
       <div className="min-h-screen bg-black text-white pt-24 pb-8">
-        {/* Floating Background Elements for Wow Factor */}
-        <div className="fixed inset-0 pointer-events-none overflow-hidden">
-          <motion.div
-            className="absolute w-96 h-96 rounded-full bg-gradient-radial from-white/[0.02] to-transparent blur-3xl"
-            style={{ 
-              x: useTransform(scrollYProgress, [0, 1], [-100, 100]),
-              y: useTransform(scrollYProgress, [0, 1], [0, 200]),
-            }}
-            animate={{
-              scale: [1, 1.2, 1],
-              opacity: [0.3, 0.6, 0.3],
-            }}
-            transition={{
-              duration: 8,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          />
-          <motion.div
-            className="absolute right-0 top-1/3 w-64 h-64 rounded-full bg-gradient-radial from-white/[0.01] to-transparent blur-2xl"
-            style={{ 
-              x: useTransform(scrollYProgress, [0, 1], [50, -150]),
-              y: useTransform(scrollYProgress, [0, 1], [100, -100]),
-            }}
-            animate={{
-              scale: [1.2, 1, 1.2],
-              opacity: [0.2, 0.4, 0.2],
-            }}
-            transition={{
-              duration: 12,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: 4
-            }}
-          />
-        </div>
-
         {/* Aesthetic Masonry Grid with Proper Aspect Ratios */}
-        <div className="max-w-7xl mx-auto px-4 gallery-container relative z-10" ref={containerRef}>
+        <div className="max-w-7xl mx-auto px-4 gallery-container">
           <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 xl:columns-6 gap-4">
             {galleryItems.map((item, index) => {
-              // Determine which parallax layer this item belongs to
-              const parallaxLayer = index % 3;
-              const yTransform = parallaxLayer === 0 ? y1 : parallaxLayer === 1 ? y2 : y3;
-              
               return (
-                <motion.div
+                <div
                   key={item.id}
-                  id={`gallery-item-${index}`}
-                  className="break-inside-avoid mb-4 group cursor-pointer gallery-item gallery-item-container"
+                  className="break-inside-avoid mb-4 group cursor-pointer transition-transform duration-200 ease-out hover:scale-[1.02] hover:rotate-0.5 gallery-item"
                   onClick={() => handleItemClick(item)}
-                  style={{ y: yTransform }}
-                  initial={{ opacity: 0, y: 20, scale: 0.9 }}
-                  animate={
-                    isVisible[`gallery-item-${index}`] 
-                      ? { opacity: 1, y: 0, scale: 1 }
-                      : { opacity: 0, y: 20, scale: 0.9 }
-                  }
-                  transition={{ 
-                    duration: 0.6, 
-                    delay: (index % 12) * 0.1, // Stagger animation
-                    ease: [0.21, 1.11, 0.81, 0.99] // Custom easing for smooth feel
-                  }}
-                  whileHover={{ 
-                    scale: 1.03, 
-                    rotate: 1,
-                    transition: { duration: 0.2 }
-                  }}
-                  whileTap={{ scale: 0.98 }}
                 >
                   {item.type === 'quote' ? (
                     // Quote card - styled with Helvetica Bold and new properties
@@ -686,7 +589,7 @@ export default function GalleryPage() {
                       </div>
                     </div>
                   )}
-                </motion.div>
+                </div>
               );
             })}
           </div>
