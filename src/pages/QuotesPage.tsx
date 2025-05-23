@@ -9,7 +9,21 @@ export default function QuotesPage() {
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isDownloading, setIsDownloading] = useState(false);
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
   const quoteRef = useRef<HTMLDivElement>(null);
+  
+  // Check for reduced motion preference
+  useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    setPrefersReducedMotion(mediaQuery.matches);
+    
+    const handleChange = (e: MediaQueryListEvent) => {
+      setPrefersReducedMotion(e.matches);
+    };
+    
+    mediaQuery.addEventListener('change', handleChange);
+    return () => mediaQuery.removeEventListener('change', handleChange);
+  }, []);
   
   // Function to advance to next quote
   const nextQuote = () => {
@@ -18,7 +32,7 @@ export default function QuotesPage() {
       setTimeout(() => {
         setCurrentQuoteIndex((prevIndex) => (prevIndex + 1) % quotes.length);
         setIsTransitioning(false);
-      }, 500);
+      }, prefersReducedMotion ? 100 : 500);
     }
   };
   
@@ -31,16 +45,18 @@ export default function QuotesPage() {
           prevIndex === 0 ? quotes.length - 1 : prevIndex - 1
         );
         setIsTransitioning(false);
-      }, 500);
+      }, prefersReducedMotion ? 100 : 500);
     }
   };
   
-  // Update mouse position for the light effect
+  // Update mouse position for the light effect (only if motion is allowed)
   const handleMouseMove = (e: React.MouseEvent) => {
-    setMousePosition({
-      x: e.clientX,
-      y: e.clientY
-    });
+    if (!prefersReducedMotion) {
+      setMousePosition({
+        x: e.clientX,
+        y: e.clientY
+      });
+    }
   };
   
   // Keyboard navigation
@@ -172,13 +188,20 @@ export default function QuotesPage() {
         onTouchStart={handleTouchStart}
       >
         {/* Subtle radial gradient background that follows mouse */}
-        <div 
-          className="absolute w-[40vw] h-[40vw] rounded-full opacity-[0.07] pointer-events-none bg-gradient-radial from-white via-white/50 to-transparent blur-xl transition-all duration-1000 ease-out"
-          style={{
-            left: `${mousePosition.x - 400}px`,
-            top: `${mousePosition.y - 400}px`,
-          }}
-        />
+        {!prefersReducedMotion && (
+          <div 
+            className="absolute w-[40vw] h-[40vw] rounded-full opacity-[0.07] pointer-events-none bg-gradient-radial from-white via-white/50 to-transparent blur-xl transition-all duration-1000 ease-out"
+            style={{
+              left: `${mousePosition.x - 400}px`,
+              top: `${mousePosition.y - 400}px`,
+            }}
+          />
+        )}
+        
+        {/* Static ambient light for reduced motion users */}
+        {prefersReducedMotion && (
+          <div className="absolute inset-0 bg-gradient-radial from-white/5 via-transparent to-transparent pointer-events-none" />
+        )}
         
         <div className="max-w-4xl w-full px-4 sm:px-6 md:px-8 lg:px-12 z-10">
           <div className="text-center">

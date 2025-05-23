@@ -109,6 +109,8 @@ export const Footer: FC = () => {
             Aiman Salim &copy; {currentYear}
             {/* Easter egg link to quotes - intentionally subtle */}
             <Link to="/quotes" className="cursor-default inline-block ml-1 hover:text-white/20 transition-colors" aria-label="Quotes">∞</Link>
+            {/* Hidden gallery link - even more subtle */}
+            <Link to="/gallery" className="cursor-default inline-block ml-1 hover:text-white/30 transition-colors opacity-30 hover:opacity-60" aria-label="Gallery">+</Link>
           </p>
         </div>
       </div>

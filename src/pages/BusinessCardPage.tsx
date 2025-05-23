@@ -108,28 +108,11 @@ export default function BusinessCardPage() {
     }
   };
 
-  // Function to download both sides as PDF
+  // Improved function to download both sides as PDF using direct image URLs
   const downloadBothSidesPDF = async () => {
-    if (!frontCardRef.current || !backCardRef.current) return;
     setIsDownloading(true);
 
     try {
-      const frontCanvas = await html2canvas(frontCardRef.current, {
-        backgroundColor: '#000000',
-        scale: PIXEL_RATIO,
-        logging: false,
-        allowTaint: true,
-        useCORS: true
-      });
-
-      const backCanvas = await html2canvas(backCardRef.current, {
-        backgroundColor: '#000000',
-        scale: PIXEL_RATIO,
-        logging: false,
-        allowTaint: true,
-        useCORS: true
-      });
-
       // Create PDF with correct business card dimensions
       const pdf = new jsPDF({
         orientation: 'landscape',
@@ -137,18 +120,93 @@ export default function BusinessCardPage() {
         format: [CARD_WIDTH_MM, CARD_HEIGHT_MM]
       });
 
-      // Add front side
-      const frontImgData = frontCanvas.toDataURL('image/png', 1.0);
-      pdf.addImage(frontImgData, 'PNG', 0, 0, CARD_WIDTH_MM, CARD_HEIGHT_MM);
+      // Load the front image
+      const loadFrontImage = () => {
+        return new Promise((resolve, reject) => {
+          const img = new Image();
+          img.crossOrigin = 'Anonymous';
+          img.onload = () => resolve(img);
+          img.onerror = (e) => reject(e);
+          img.src = FRONT_IMAGE;
+        });
+      };
+
+      // Load the back image
+      const loadBackImage = () => {
+        return new Promise((resolve, reject) => {
+          const img = new Image();
+          img.crossOrigin = 'Anonymous';
+          img.onload = () => resolve(img);
+          img.onerror = (e) => reject(e);
+          img.src = BACK_IMAGE;
+        });
+      };
+
+      // Create canvas elements for front and back
+      const frontCanvas = document.createElement('canvas');
+      frontCanvas.width = CARD_WIDTH_MM * 10; // Higher resolution
+      frontCanvas.height = CARD_HEIGHT_MM * 10; // Higher resolution
+      const frontCtx = frontCanvas.getContext('2d');
+
+      const backCanvas = document.createElement('canvas');
+      backCanvas.width = CARD_WIDTH_MM * 10; // Higher resolution
+      backCanvas.height = CARD_HEIGHT_MM * 10; // Higher resolution
+      const backCtx = backCanvas.getContext('2d');
+
+      if (!frontCtx || !backCtx) {
+        throw new Error('Failed to get canvas context');
+      }
+
+      // Draw images to canvas
+      const frontImg = await loadFrontImage() as HTMLImageElement;
+      frontCtx.drawImage(frontImg, 0, 0, frontCanvas.width, frontCanvas.height);
+      
+      const backImg = await loadBackImage() as HTMLImageElement;
+      backCtx.drawImage(backImg, 0, 0, backCanvas.width, backCanvas.height);
+
+      // Add front side to PDF
+      pdf.addImage(
+        frontCanvas.toDataURL('image/png'), 
+        'PNG', 
+        0, 
+        0, 
+        CARD_WIDTH_MM, 
+        CARD_HEIGHT_MM
+      );
       
       // Add back side on a new page
       pdf.addPage([CARD_WIDTH_MM, CARD_HEIGHT_MM], 'landscape');
-      const backImgData = backCanvas.toDataURL('image/png', 1.0);
-      pdf.addImage(backImgData, 'PNG', 0, 0, CARD_WIDTH_MM, CARD_HEIGHT_MM);
+      pdf.addImage(
+        backCanvas.toDataURL('image/png'), 
+        'PNG', 
+        0, 
+        0, 
+        CARD_WIDTH_MM, 
+        CARD_HEIGHT_MM
+      );
       
-      pdf.save('aiman-salim-business-card-both-sides.pdf');
+      pdf.save('aiman-salim-business-card.pdf');
     } catch (error) {
       console.error('Error generating PDF:', error);
+      // Fallback method if the above doesn't work
+      try {
+        const pdf = new jsPDF({
+          orientation: 'landscape',
+          unit: 'mm',
+          format: [CARD_WIDTH_MM, CARD_HEIGHT_MM]
+        });
+        
+        // Add the front page directly (less ideal but more compatible)
+        pdf.addImage(FRONT_IMAGE, 'PNG', 0, 0, CARD_WIDTH_MM, CARD_HEIGHT_MM);
+        
+        // Add back side on a new page
+        pdf.addPage([CARD_WIDTH_MM, CARD_HEIGHT_MM], 'landscape');
+        pdf.addImage(BACK_IMAGE, 'PNG', 0, 0, CARD_WIDTH_MM, CARD_HEIGHT_MM);
+        
+        pdf.save('aiman-salim-business-card.pdf');
+      } catch (fallbackError) {
+        console.error('Fallback PDF generation failed:', fallbackError);
+      }
     } finally {
       setIsDownloading(false);
     }

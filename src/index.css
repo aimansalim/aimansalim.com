@@ -4,10 +4,35 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --color-primary: #ffffff;
+  --color-secondary: rgba(255, 255, 255, 0.7);
+  --color-accent: rgba(255, 255, 255, 0.1);
+  --color-background: #000000;
+  --spacing-unit: 1rem;
+  --border-radius: 2px;
+  --transition-fast: 0.15s;
+  --transition-normal: 0.3s;
+  --transition-slow: 0.6s;
+}
+
 @layer base {
   body {
     @apply bg-black text-white;
     font-family: 'Space Grotesk', sans-serif;
+    font-feature-settings: 'kern' 1, 'liga' 1;
+  }
+  
+  /* Respect user motion preferences */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 
@@ -21,27 +46,90 @@
   50% { opacity: 0.15; }
 }
 
+@keyframes glow {
+  0%, 100% { 
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.1);
+  }
+  50% { 
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2), 0 0 30px rgba(255, 255, 255, 0.1);
+  }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
 .animate-pulse-slow {
   animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-glow {
+  animation: glow 3s ease-in-out infinite;
 }
 
 .bg-gradient-radial {
   background-image: radial-gradient(circle at center, var(--tw-gradient-stops));
 }
 
+.bg-gradient-conic {
+  background-image: conic-gradient(from 0deg, var(--tw-gradient-stops));
+}
+
 .hairline {
   height: 1px;
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: var(--color-accent);
 }
 
 .box-hairline {
+  border: 1px solid var(--color-accent);
+}
+
+/* Enhanced glassmorphism effect */
+.glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.glass-hover {
+  transition: all var(--transition-normal) ease;
+}
+
+.glass-hover:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+/* Shimmer effect for loading states */
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  transform: translateX(-100%);
+  animation: shimmer 2s infinite;
 }
 
 .hover-trigger .hover-target {
   opacity: 0;
   transform: translateX(-10px);
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal) ease;
 }
 
 .hover-trigger:hover .hover-target {
@@ -52,12 +140,12 @@
 .grid-pattern {
   background-size: 40px 40px;
   background-image: 
-    linear-gradient(to right, rgba(255, 255, 255, 0.025) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(255, 255, 255, 0.025) 1px, transparent 1px);
+    linear-gradient(to right, var(--color-accent) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--color-accent) 1px, transparent 1px);
 }
 
 .swiss-hover {
-  transition: all 0.3s ease;
+  transition: all var(--transition-normal) ease;
 }
 
 .swiss-hover:hover {
@@ -76,10 +164,37 @@
   left: 0;
   width: 0;
   height: 1px;
-  background-color: white;
-  transition: width 0.3s ease;
+  background-color: var(--color-primary);
+  transition: width var(--transition-normal) ease;
 }
 
 .link-underline:hover::after {
   width: 100%;
+}
+
+/* Modern focus styles */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-white/20 focus:ring-offset-2 focus:ring-offset-black;
+}
+
+/* Container queries support */
+@container (min-width: 768px) {
+  .container-md\:text-lg {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
+  }
+}
+
+/* Scroll-driven animations */
+@supports (animation-timeline: scroll()) {
+  .scroll-fade {
+    animation: fade-in linear;
+    animation-timeline: view();
+    animation-range: entry 0% cover 30%;
+  }
+}
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
