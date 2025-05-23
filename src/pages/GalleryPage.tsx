@@ -1,4 +1,4 @@
-import React, { useState, useRef, useMemo } from 'react';
+import React, { useState, useRef, useMemo, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Mail, ExternalLink, Download } from 'lucide-react';
@@ -244,9 +244,25 @@ const shuffleArray = (array: GalleryItem[]) => {
 
 export default function GalleryPage() {
   const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
+  const [imagesLoaded, setImagesLoaded] = useState<Set<string>>(new Set());
   const quoteModalContentRef = useRef<HTMLParagraphElement>(null); // Ref for quote content in modal
 
   const galleryItems = useMemo(() => shuffleArray(allGalleryItems), []);
+
+  // Preload all images immediately
+  useEffect(() => {
+    const imageUrls = galleryItems
+      .filter(item => item.imageUrl)
+      .map(item => item.imageUrl!);
+    
+    imageUrls.forEach(url => {
+      const img = new Image();
+      img.onload = () => {
+        setImagesLoaded(prev => new Set([...prev, url]));
+      };
+      img.src = url;
+    });
+  }, [galleryItems]);
 
   const handleItemClick = (item: GalleryItem) => {
     setSelectedItem(item);
@@ -322,6 +338,18 @@ export default function GalleryPage() {
       <Helmet>
         <title>Gallery | Aiman Salim</title>
         <meta name="description" content="Creative gallery showcasing design work, thumbnails, and projects." />
+        {/* Preload critical gallery images */}
+        {galleryItems.slice(0, 20).filter(item => item.imageUrl).map(item => (
+          <link key={item.id} rel="preload" as="image" href={item.imageUrl} />
+        ))}
+        {/* Disable image loading animations */}
+        <style>{`
+          img { 
+            image-rendering: -webkit-optimize-contrast !important;
+            image-rendering: crisp-edges !important;
+            background: transparent !important;
+          }
+        `}</style>
       </Helmet>
 
       {/* Custom CSS to remove ALL blue highlights and selections */}
@@ -360,6 +388,35 @@ export default function GalleryPage() {
         
         ::-moz-selection {
           background: transparent !important;
+        }
+
+        /* Remove ALL blue elements and ensure instant loading */
+        img {
+          background-color: transparent !important;
+          background-image: none !important;
+          will-change: auto !important;
+        }
+        
+        /* Disable all browser loading indicators */
+        img:not([src]) {
+          opacity: 0 !important;
+        }
+        
+        img[src] {
+          opacity: 1 !important;
+        }
+        
+        /* Force immediate rendering */
+        .gallery-container {
+          contain: layout style paint;
+          will-change: auto;
+        }
+        
+        .gallery-item {
+          contain: layout style paint;
+          will-change: auto;
+          image-rendering: -webkit-optimize-contrast;
+          image-rendering: crisp-edges;
         }
 
         /* Apple-like edge styling */
@@ -426,13 +483,13 @@ export default function GalleryPage() {
 
       <div className="min-h-screen bg-black text-white pt-24 pb-8">
         {/* Aesthetic Masonry Grid with Proper Aspect Ratios */}
-        <div className="max-w-7xl mx-auto px-4">
+        <div className="max-w-7xl mx-auto px-4 gallery-container">
           <div className="columns-2 sm:columns-3 md:columns-4 lg:columns-5 xl:columns-6 gap-4">
             {galleryItems.map((item, index) => {
               return (
                 <div
                   key={item.id}
-                  className="break-inside-avoid mb-4 group cursor-pointer transition-transform duration-300 ease-out group-hover:scale-[1.03] group-hover:rotate-1"
+                  className="break-inside-avoid mb-4 group cursor-pointer transition-transform duration-200 ease-out group-hover:scale-[1.03] group-hover:rotate-1 gallery-item"
                   onClick={() => handleItemClick(item)}
                 >
                   {item.type === 'quote' ? (
@@ -467,14 +524,14 @@ export default function GalleryPage() {
                         {item.content}
                       </p>
                       {/* Quote hover overlay - simplified & centered icon */}
-                      <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center rounded-xl z-20">
+                      <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-all duration-150 flex items-center justify-center rounded-xl z-20">
                         <div className="flex space-x-2">
                           <a
                             href={item.sourceUrl}
                             target="_blank"
                             rel="noopener noreferrer"
                             onClick={(e) => e.stopPropagation()}
-                            className="p-2 bg-white/90 text-black rounded-full hover:bg-white transition-colors backdrop-blur-sm scale-90 group-hover:scale-100"
+                            className="p-2 bg-white/90 text-black rounded-full hover:bg-white transition-colors duration-150 backdrop-blur-sm scale-90 group-hover:scale-100"
                           >
                             <ExternalLink className="w-3 h-3" />
                           </a>
@@ -484,7 +541,7 @@ export default function GalleryPage() {
                     </div>
                   ) : (
                     // Image card
-                    <div className="relative apple-edge overflow-hidden bg-gray-900 transition-all duration-300">
+                    <div className="relative apple-edge overflow-hidden bg-black transition-all duration-300">
                       <div 
                         className="w-full relative z-10"
                         style={{ aspectRatio: item.aspectRatio }}
@@ -493,12 +550,17 @@ export default function GalleryPage() {
                           src={item.imageUrl}
                           alt={item.title}
                           className="w-full h-full object-cover rounded-xl"
-                          loading="lazy"
+                          loading="eager"
+                          decoding="async"
+                          style={{
+                            backgroundColor: 'transparent',
+                            minHeight: 'auto'
+                          }}
                         />
                       </div>
                       
                       {/* Elegant hover overlay - icons centered, text label removed */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-300 flex items-center justify-center rounded-xl z-20">
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-all duration-150 flex items-center justify-center rounded-xl z-20">
                         <div className="flex space-x-2">
                           {/* Mail button shown for relevant image types */}
                           {(item.type === 'thumbnail' || item.type === 'design' || item.type === 'business-card') && (
@@ -507,7 +569,7 @@ export default function GalleryPage() {
                                 e.stopPropagation();
                                 sendDirectEmail(item);
                               }}
-                              className="p-2 bg-white/90 text-black rounded-full hover:bg-white transition-colors backdrop-blur-sm scale-90 group-hover:scale-100"
+                              className="p-2 bg-white/90 text-black rounded-full hover:bg-white transition-colors duration-150 backdrop-blur-sm scale-90 group-hover:scale-100"
                             >
                               <Mail className="w-3 h-3" />
                             </button>
@@ -518,7 +580,7 @@ export default function GalleryPage() {
                               target="_blank"
                               rel="noopener noreferrer"
                               onClick={(e) => e.stopPropagation()}
-                              className="p-2 bg-white/90 text-black rounded-full hover:bg-white transition-colors backdrop-blur-sm scale-90 group-hover:scale-100"
+                              className="p-2 bg-white/90 text-black rounded-full hover:bg-white transition-colors duration-150 backdrop-blur-sm scale-90 group-hover:scale-100"
                             >
                               <ExternalLink className="w-3 h-3" />
                             </a>
@@ -605,6 +667,12 @@ export default function GalleryPage() {
                       src={selectedItem.imageUrl}
                       alt={selectedItem.title}
                       className="max-w-full max-h-[70vh] object-contain"
+                      loading="eager"
+                      decoding="async"
+                      style={{
+                        backgroundColor: 'transparent',
+                        imageRendering: '-webkit-optimize-contrast'
+                      }}
                     />
                   </div>
                 )}
